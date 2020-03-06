@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all
-# Edit at https://www.gitignore.io/?templates=c,c++,tex,cmake,latex,python,clion+all,pycharm+all
+# Created by https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
 
 ### C ###
 # Prerequisites
@@ -725,4 +725,15 @@ dmypy.json
 ### TeX Patch ###
 # glossaries
 
-# End of https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
