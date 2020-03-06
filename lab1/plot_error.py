@@ -3,7 +3,7 @@ from os import system
 import numpy as np
 
 plot_out = 'plot.txt'
-program = 'z1.o'
+program = 'z1_steps.o'
 steps = 25000
 
 system('./'+program+' > '+plot_out)
