@@ -5,20 +5,20 @@ using namespace std;
 #define simple 1
 #define recursive 2
 #define kahan 3
-// #define time recursive
+// #define TIME recursive
 // Defines if programme should run one method only
 // Not defined means running all
 // Usefull for the purpose of time measurement
 
-#ifndef time
-    #define steps 25000     
+#ifndef TIME
+    // #define STEPS 25000     
 #endif
 // Defines number of steps after which sum error 
 // should be printed in simple_sum algorithm
 // Not defined means non should be printed
 
 
-const float v = 0.53125;
+const float v = 0.63211;
 const int N = 10000000;
 float tab[N+5];
 
@@ -27,9 +27,10 @@ float simple_sum(){
     float res = 0.0;
 
     for(int i = 0; i<N; i++){
-        #ifdef steps
-        if(i % steps == 0)
-            cout<< v*(float)i - res<<endl;
+        #ifdef STEPS
+        if(i % STEPS == 0)
+            cout<<(v*(float)i - res)<<endl;
+            // cout<< abs(v*(float)i - res)<<endl;
         #endif
 
         res += tab[i];
@@ -63,8 +64,8 @@ int main(){
     for(int i = 0; i<N; i++)
         tab[i] = v;
 
-    #ifndef time
-        #ifndef steps
+    #ifndef TIME
+        #ifndef STEPS
             // Calculate precise value of sum
             const float precise = N*v; 
 
@@ -88,14 +89,14 @@ int main(){
             simple_sum();
         #endif
     #else 
-        #if time == simple
-        cout<<"Wynik sumowania prostego: "<<simple_sum()<<endl;
+        #if TIME == simple
+            simple_sum();
         #endif 
-        #if time == recursive
-        cout<<"Wynik sumowania rekursywnego: "<<recursive_sum()<<endl;
+        #if TIME == recursive
+            recursive_sum();
         #endif
-        #if time == kahan
-        cout<<"Wynik sumowania kahana: "<<kahan_sum()<<endl;
+        #if TIME == kahan
+            kahan_sum();
         #endif
     #endif
 
