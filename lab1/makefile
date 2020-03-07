@@ -32,7 +32,13 @@ steps:
 	python plot_error.py
 	rm z1_steps.o
 
-plot: z4
+bifurcation: z4
 	rm -f plot_z4.png
 	python plot_z4.py
+	rm -f z4.o
+
+plot: 
+	g++ -DR=2.6 -static -O2 z4.cpp -o z4.o
+	rm -f plot_z4.png
+	python plot_z4.py -n
 	rm -f z4.o
