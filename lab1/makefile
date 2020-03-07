@@ -39,6 +39,6 @@ bifurcation: z4
 
 plot: 
 	g++ -DR=2.6 -static -O2 z4.cpp -o z4.o
-	rm -f plot_z4.png
+	rm -f plot_z4.png plot_z4.gif
 	python plot_z4.py -n
 	rm -f z4.o
