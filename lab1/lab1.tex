@@ -13,6 +13,9 @@
 \usepackage{tabularx}
 \usepackage{placeins}
 \usepackage{pdflscape}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{hyperref}
 
 \geometry{
 a4paper,
@@ -52,11 +55,77 @@ Laboratorium I}
 \begin{document}
     \maketitle
     \section{Sumowanie liczb pojedynczej precyzji}
-        \begin{figure}
+        W ramach laboratorium zaimplementowałem trzy algorytmy obliczające sumę $N$ liczb z tablicy, każdej o wartości $v$. Za $N$ przyjąłem $10^7$, za $v$ początkowo $v=0.53125$. \\
+        Obliczyłem błąd względny i bezwzględny jakim obarczone były przeprowadzone operacje arytmetyczne, uzyskując poniższe wyniki. 
+        \begin{center}
+            \begin{table}[ht]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    Mierzona wartość & Sumowanie proste & Sumowanie rekursywne & Sumowanie Kahana\\
+                    \specialrule{1pt}{1pt}{1pt}
+                    Wynik sumowania &  5030840.50 & 5312500.00 & 5312500.00\\
+                    \hline
+                    Błąd bezwzględny & 281659.50 & 0.00 & 0.00\\
+                    \hline
+                    Błąd względny & 5.30\% & 0.00\% & 0.00\%\\
+                    \hline 
+                \end{tabular}
+                \caption{Wyniki obliczeń dla $v=0.53125$}
+                \label{tab:my_label}
+            \end{table}
+        \end{center}
+        Następnie zmieniłem wartość $v$ na $0.63211$, uzyskując poniższe wyniki. 
+        \begin{center}
+            \begin{table}[ht]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    Mierzona wartość & Sumowanie proste & Sumowanie rekursywne & Sumowanie Kahana\\
+                    \specialrule{1pt}{1pt}{1pt}
+                    Wynik sumowania &  6119759.50 & 6321100.00 & 6321100.00\\
+                    \hline
+                    Błąd bezwzględny & 201340.50 & 0.00 & 0.00\\
+                    \hline
+                    Błąd względny & 3.18\% & 0.00\% & 0.00\%\\
+                    \hline 
+                \end{tabular}
+                \caption{Wyniki obliczeń dla $v=0.63211$}
+                \label{tab:my_label}
+            \end{table}
+        \end{center}
+        Błąd względny w algorytmie prostym znacznie rośnie, ponieważ wielokrotnie sumuje on liczby zupełnie różnych rzędów wielkości. Błąd względny jest znacznie mniejszy w algorytmie Kahana, jak i sumowania rekursywnego względem algorytmu prostego. W algorytmie rekursywnym, błąd nie występuje, ponieważ sumowane liczby są tego samego rzędu. Algorytm Kahana śledzi występujący błąd obliczeń i minimalizuje go w kolejnych sumowaniach.\\ %TODO: Co robi err? 
+        Prześledziłem również jak wyglądał wzrost błędu w algorytmie prostego sumowania. Zebrane wyniki przedstawiłem na poniższych wykresach. Błękitnymi kropkami oznaczono każdy milion kroków. 
+        \begin{figure}[h!]
             \centering
-            \includegraphics[width=12cm]{lab1/img/ErrorsPlot_1.png}
+            \subfloat[$v=0.53125$]{\includegraphics[width=9cm]{lab1/img/ErrorsPlot_1.png}}
+            \subfloat[$v=0.63211$]{\includegraphics[width=9cm]{lab1/img/ErrorsPlot_2.png}}
             \caption{Wykres zmiany błędu bezwzględnego w stosunku do liczby sumowań.}
-            \label{fig:my_label}
-        \end{figure}
+        \end{figure}\\
+        Łatwo zauważyć, że wykres narastania błędu jest ciągłą sumą funkcji liniowych. W początkowej fazie, gdy dodawane wartości są tego samego rzędu, błąd nie rośnie w ogóle, lub rośnie wolno. 
+        \FloatBarrier
+        Wykonałem także porównanie czasów wykonania dla każdego z trzech algorytmów. Do pomiarów czasu w sposób powtarzalny użyłem pakietu sio2jail (\url{https://github.com/sio2project/sio2jail}), którego specyfika została lepiej opisana w pracy licencjackiej (\url{https://hitagi.dasie.mimuw.edu.pl/files/licencjat/pracalic-logo.pdf}), za pośrednictwem skryptu opakowującego oiejq (\url{https://oi.edu.pl/static/attachment/20181007/oiejq.tar.gz}), używanego przez Ogólnopolską Olimpiadę Informatyczną. Otrzymałem następujące wyniki.\\
+        \begin{center}
+            \begin{table}[ht]
+                \centering
+                \begin{tabular}{|c|c|}
+                    \hline
+                    Algorytm  & Czas wykonania \\
+                    \specialrule{1pt}{1pt}{1pt}
+                    Prosty & $21ms$ \\
+                    \hline
+                    Rekursywny & $156ms$ \\
+                    \hline
+                    Kahana & $21ms$ \\
+                    \hline 
+                \end{tabular}
+                \caption{Pomiar czasów wykonania}
+                \label{tab:my_label}
+            \end{table}
+        \end{center}\\
+        Dla uprzednio rozważanych wartości $v$ zarówno algorytm rekursywny, jak i algorytm Kahana zwracał dokładny wynik. Jednak dla $v=0.666666$ w wyniku działania algorytmu rekursywnego otrzymałem wynik obarczony błędem bezwzględnym rzędu $0.50$, podczas gdy algorytm Kahana zwrócił wynik dokładny. 
+        
+    \section{Błędy zaokrągleń i odwzorowanie logistyczne}
+        
     
 \end{document}
