@@ -737,3 +737,4 @@ dmypy.json
 .history
 
 # End of https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
+.vscode/
