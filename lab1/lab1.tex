@@ -16,6 +16,7 @@
 \usepackage{graphicx}
 \usepackage{subfig}
 \usepackage{hyperref}
+\usepackage{amsmath}
 
 \geometry{
 a4paper,
@@ -126,6 +127,30 @@ Laboratorium I}
         Dla uprzednio rozważanych wartości $v$ zarówno algorytm rekursywny, jak i algorytm Kahana zwracał dokładny wynik. Jednak dla $v=0.666666$ w wyniku działania algorytmu rekursywnego otrzymałem wynik obarczony błędem bezwzględnym rzędu $0.50$, podczas gdy algorytm Kahana zwrócił wynik dokładny. 
         
     \section{Błędy zaokrągleń i odwzorowanie logistyczne}
+        W celu prześledzenia zbieżności procesu iteracyjnego określonego zadanym odwzorowaniem logistycznym przygotowałem interaktywny wykres wartości kolejnych elementów ciągu dla wartości stałej $r$ z przedziału $[1.0, 4.0]$ i $x_0 = 0.77$. Ze względu na ograniczenia techniczne formatu pdf, wspomniany wykres umieściłem pod poniższym adresem \url{http://users.v-lo.krakow.pl/~maciektr/mownit/lab1_logistic_map.gif}.\\
+        Za jego pomocą łatwo wywnioskować, że:
+        \begin{itemize}
+            \item dla $r\in[1.0,2.5]$ - kolejne elementy ciągu szybko zbiegają do swojej granicy. Możemy prosto wyznaczyć ją sposobem wspomniany poniżej.
+            \item dla $r\in[2.5,3.0]$ - ciąg jest zbieżny, ale w początkowej fazie waha się. 
+            \item dla $r\in[3.0,3.5]$ - odwzorowanie tworzy oscylator.
+            \item dla $r\in[3.5,4.0]$ - otrzymujemy chaotyczne drgania. 
+        \end{itemize}
+        Załóżmy, że ciąg $x_n$ jest zbieżny. Niech $\lim_{n\to\infty} x_n=g$. Wtedy: 
+        $$\lim_{n\to\infty} x_{n+1}=g=\lim_{n\to\infty} rx_n(1-x_n)=rg(1-g)\implies r(1-g)=1 \implies g=\frac{r-1}{r}$$
+        Następnie przygotowałem wykres bifurkacyjny dla zadanego odwzorowania. Oryginalny obraz, o rozdzielczości $4000x4000$ pikseli umieściłem pod następującym adresem \url{http://users.v-lo.krakow.pl/~maciektr/mownit/lab1_bifurcation.png}.
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$x_0=0.7;r\in(1.0, 4.0)$]{\includegraphics[width=18cm]{lab1/img/Bifurcation_0.png}}
+            \caption{Diagram bifurkacyjny.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$x_0=0.7;r\in(3.5, 4.0)$]{\includegraphics[width=5cm]{lab1/img/Bifurcation_3.png}}
+            \subfloat[$x_0=0.8;r\in(1.0, 4.0)$]{\includegraphics[width=5cm]{lab1/img/Bifurcation_6.png}}
+            \caption{Diagram bifurkacyjny.}
+        \end{figure}\\
+
+        Zauważmy, 
         
     
 \end{document}
