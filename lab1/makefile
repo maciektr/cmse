@@ -37,8 +37,14 @@ bifurcation: z4
 	python plot_z4.py
 	rm -f z4.o
 
-plot: 
-	g++ -DR=2.6 -static -O2 z4.cpp -o z4.o
+plotting: 
+	g++ -DR -static -O2 z4.cpp -o z4.o
 	rm -f plot_z4.png plot_z4.gif
+
+gif: plotting
 	python plot_z4.py -n
+	rm -f z4.o
+
+plot: plotting 	
+	python plot_z4.py -s
 	rm -f z4.o
