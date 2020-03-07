@@ -9,7 +9,7 @@ args = parser.parse_args()
 
 plot_out = 'plot_z4.txt'
 program = 'z4.o'
-ran = 4. - 1. if not args.n else None
+ran = 4. - 3.5 if not args.n else None
 
 system('./'+program+' > '+plot_out)
 values = list(map(lambda x: float(x[:-1]),open(plot_out,'r').readlines()))
@@ -20,7 +20,7 @@ if not args.n:
     ax.set_ylabel('x_n')
     for i in range(10):
         v = [values[k] for k in range(i,len(values),10)]
-        r = [m*(ran/len(v)) for m in range(len(v))]
+        r = [1.+m*(ran/len(v)) for m in range(len(v))]
         ax.plot(r,v)
     ax.set_xlabel('r')
     plt.savefig('plot_z4.png')
