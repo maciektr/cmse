@@ -1,9 +1,12 @@
 # Makefile
 
-main: z1 z4 
+main: z1 z4 z3
 
 z1:
 	g++ -static -O2 z1.cpp -o z1.o
+
+z3:
+	g++ -static -O2 z3.cpp -o z3.o
 
 z4:
 	g++ -static -O2 z4.cpp -o z4.o
@@ -48,3 +51,7 @@ gif: plotting
 plot: plotting 	
 	python plot_z4.py -s
 	rm -f z4.o
+
+zero:
+	g++ -DR -DZ -static -O2 z4.cpp -o z4.o
+	./z4.o
