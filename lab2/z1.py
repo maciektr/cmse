@@ -1,12 +1,7 @@
 import numpy as np 
 
 def scale(x):
-    for i in range(len(x)):
-        mx = max(x[i])
-        if mx == 0:
-            continue
-        x[i] = (x[i] / mx)
-    return x
+    return (x.T / np.max(x, axis=1)).T
 
 def solve(A,B):
     AB = scale(np.hstack((A,B)))
