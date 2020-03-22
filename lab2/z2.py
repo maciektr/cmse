@@ -1,19 +1,12 @@
 import numpy as np 
+from z1 import scale
 
-def scale(x):
-    for i in range(len(x)):
-        mx = max(x[i])
-        if mx == 0:
-            continue
-        x[i] = (x[i] / mx)
-    return x 
+def get_random_array(n):
+    val_range = 10**6
+    return np.random.uniform(-val_range,val_range,size=(n,n))
 
-if __name__ == "__main__":
-    np.set_printoptions(suppress=True)
-    val_range = 1*10**6
-    n = 500
-    A = scale(np.random.uniform(-val_range,val_range,size=(n,n)))
-    
+def decomposition(A):
+    n = A.shape[0]
     U = np.copy(A)
     L = np.zeros((n,n))
 
@@ -24,6 +17,13 @@ if __name__ == "__main__":
             U[k] -= U[i] * l
             L[k][i] = l
             U[k][i] = 0.
+    return L,U
+
+if __name__ == "__main__":
+    np.set_printoptions(suppress=True)
+    A = scale(get_random_array(4))
+    
+    L, U = decomposition(A)
 
     X = L @ U 
     print(A)
