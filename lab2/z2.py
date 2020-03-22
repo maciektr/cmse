@@ -1,5 +1,5 @@
 import numpy as np 
-from z1 import scale
+from z1 import scale, partial_pivoting
 
 def get_random_array(n):
     val_range = 10**6
@@ -7,7 +7,7 @@ def get_random_array(n):
 
 def decomposition(A):
     n = A.shape[0]
-    U = np.copy(A)
+    U = scale(np.copy(A))
     L = np.zeros((n,n))
 
     for i in range(n):
@@ -21,8 +21,8 @@ def decomposition(A):
 
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)
-    A = scale(get_random_array(4))
-    
+    A = scale(partial_pivoting(get_random_array(500)))
+
     L, U = decomposition(A)
 
     X = L @ U 

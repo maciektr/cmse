@@ -3,8 +3,21 @@ import numpy as np
 def scale(x):
     return (x.T / np.max(x, axis=1)).T
 
+def partial_pivoting(X):
+    for i in range(len(X)):
+        mx = X[i][i]
+        mi = i
+        for k in range(i+1,len(X)):
+            if X[i][k] > mx:
+                mx = X[i][k]
+                mi = k
+        X[[i, k]] = X[[k, i]]
+
+    return X 
+
 def solve(A,B):
     AB = scale(np.hstack((A,B)))
+    AB = partial_pivoting(AB)
 
     for i in range(n):
         for k in range(n):
