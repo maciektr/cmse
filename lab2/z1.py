@@ -7,8 +7,9 @@ def scale(x):
 
 if __name__ == "__main__":
     n = 500
-    A = np.random.uniform(-1*10**6,10**6,size=(n,n))
-    B = np.random.uniform(-1*10**6,10**6,size=(n,1))
+    val_range = 1*10**6
+    A = np.random.uniform(-val_range,val_range,size=(n,n))
+    B = np.random.uniform(-val_range,val_range,size=(n,1))
     print("Numpy solution:\n",np.linalg.solve(A,B).reshape((n)))
 
     AB = scale(np.hstack((A,B)))
