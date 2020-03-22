@@ -10,7 +10,9 @@ if __name__ == "__main__":
     val_range = 1*10**6
     A = np.random.uniform(-val_range,val_range,size=(n,n))
     B = np.random.uniform(-val_range,val_range,size=(n,1))
-    print("Numpy solution:\n",np.linalg.solve(A,B).reshape((n)))
+    
+    npsol = np.linalg.solve(A,B).reshape((n))
+    print("Numpy solution:\n",npsol)
 
     AB = scale(np.hstack((A,B)))
 
@@ -22,8 +24,10 @@ if __name__ == "__main__":
             AB[k] -= AB[i]
             AB[k][i] = 0.
 
-    res = []
+    tab = []
     for i in range(n):
-        res.append(AB[i][n] / AB[i][i])
+        tab.append(AB[i][n] / AB[i][i])
+    res = np.array(tab)
 
-    print("My elimination solution:\n", np.array(res))
+    print("My elimination solution:\n", res)
+    print("Results are the same: ",np.all((npsol - res) < 10 ** -7))
