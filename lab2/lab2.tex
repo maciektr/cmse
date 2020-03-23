@@ -74,15 +74,18 @@ Laboratorium II}
         \end{tabular}
         \end{center}\\
         
-        Różnica jest zatrważająca, nie jest to jednak dużym zaskoczeniem. Funkcje z pakietu numpy z natury są wydajniejsze od zwykłych funkcji pythonowych. Postanowiłem jednak zbadać wzrost czasu potrzebnego na wykonanie obliczeń w zależności od liczby elementów. \\
+        Różnica jest zatrważająca, nie jest to jednak dużym zaskoczeniem. Funkcje z pakietu numpy z natury są wydajniejsze od zwykłych funkcji pythonowych. Postanowiłem jednak zbadać wzrost czasu potrzebnego na wykonanie obliczeń w zależności od liczby elementów. Otrzymane wartości znormalizowałem, by móc porównać tempo wzrostu.\\
         \begin{figure}[h!]
             \centering
-            \subfloat[]{\includegraphics[width=9cm]{lab2/time.png}}
-            \caption{Wykres zależności czasu wykonania od .}
-        \end{figure}
+            \subfloat[]{\includegraphics[width=9cm]{lab2/img/time.png}}
+            \caption{Wykres zależności czasu wykonania od rozmiaru układu.}
+        \end{figure}\\
+        Otrzymana zależność sugeruje, że oba algorytmy działają w porównywalnej złożoności obliczeniowej, różnią się za to zdecydowanie w czasach wykonania.\\
         
     \section{Faktoryzacja LU}
         % Napisz i sprawdź funkcję dokonującą faktoryzacji A = LU macierzy A. Zastosuj częściowe poszukiwanie elementu wiodącego oraz skalowanie.
+        Następnie przygotowałem implementację prostej faktoryzacji LU macierzy, korzystając z algorytmu Gaussa. Zastosowałem przygotowaną wcześniej normalizację macierzy i częściowe poszukiwanie elementu wiodącego. Poprawność faktoryzacji sprawdziłem mnożąc ze sobą wynikowe macierze L i U. 
+         
         
     \section{Analiza obwodu elektrycznego}
         % Napisz program, który:
@@ -92,6 +95,8 @@ Laboratorium II}
         % b) Wczytuje dodatkowo trójkę liczb (s, t, E), przy czym para (s, t) wskazuje mię-
         % dzy którymi węzłami sieci przyłożono siłę elektromotoryczną E. Opór wewnętrzny
         % SEM można zaniedbać.
+        
+        
 
 
     
