@@ -91,13 +91,14 @@ class CurrentGraph(nx.DiGraph):
         out_curr = {}
         for i in self.nodes():
             for k,v in self[i].items():
-                out_curr[i] = out_curr.get(i,0) + v['current']
-                in_curr[k] = in_curr.get(k, 0) + v['current']
+                out_curr[k] = out_curr.get(k,0) + v['current']
+                in_curr[i] = in_curr.get(i, 0) + v['current']
 
         for k,v in in_curr.items():
             if k == self.source or k == self.target:
                 continue
             if abs(v - out_curr[k]) > eps:
                 return False
-
+        if abs(out_curr[self.source] - in_curr[self.target]) > eps:
+            return False
         return True
