@@ -1,13 +1,45 @@
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
+import dimacs
 
 
 class Circute(nx.Graph):
-    def __init__(self, source, target, emf):
+    def __init__(self, pathToFile):
         super().__init__()
+        source, target, emf = dimacs.read_source(pathToFile)
+        V, L = dimacs.loadWeightedGraph(pathToFile)
+        self.add_nodes_from([i for i in range(0, V)])
+        self.add_edges_from([(x - 1, y - 1) for (x, y, z) in L])
+        for (x, y, z) in L:
+            x -= 1
+            y -= 1
+            self[x][y]['resistance'] = z
+        U = {}
+        for i in range(0, V):
+            U[i] = None
+        U[source] = 0
+        U[target] = emf
+        nx.set_node_attributes(self, U, 'voltage')
         self.source = source
         self.target = target
         self.emf = emf
+
+    def findVoltages(self):
+        n = self.number_of_edges()
+        eq = np.zeros(shape=(n, n))
+        free = np.zeros(shape=(n, 1))
+        for i in self.nodes:
+            if self.nodes[i]['voltage'] is not None:
+                eq[i][i] = 1.
+                free[i] = self.nodes[i]['voltage']
+            else:
+                for k, v in self[i].items():
+                    eq[i][i] += 1. / v['resistance']
+                    eq[i][k] -= 1. / v['resistance']
+        U = np.linalg.solve(eq, free)
+        for i in self.nodes:
+            self.nodes[i]['voltage'] = U[i][0]
 
     def plot(self):
         pos = nx.spring_layout(self)
@@ -20,7 +52,7 @@ class Circute(nx.Graph):
         for i in self.nodes():
             ids[i] = i
         nx.draw_networkx_labels(self, pos, ids)
-        nx.draw_networkx_edges(self, pos, edge_color='c', arrows=True)
+        nx.draw_networkx_edges(self, pos, edge_color='c')
         nx.draw_networkx_edge_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'Ω'), nx.get_edge_attributes(self, 'resistance').items())))
         plt.show()
@@ -28,10 +60,9 @@ class Circute(nx.Graph):
 
 class CurrentGraph(nx.DiGraph):
     def __init__(self, circute: Circute):
-        super().__init__()
+        super().__init__(directed=True)
         self.add_nodes_from(circute.nodes())
         nx.set_node_attributes(self, nx.get_node_attributes(circute, 'voltage'), 'voltage')
-        print(nx.get_node_attributes(self, 'voltage'))
         self.source = circute.source
         self.target = circute.target
         for i in circute.nodes:
@@ -39,17 +70,16 @@ class CurrentGraph(nx.DiGraph):
                 v_curr = (circute.nodes[i]['voltage'] - circute.nodes[k]['voltage']) / v['resistance']
                 if v_curr > 0.:
                     self.add_edge(i, k)
-                    self[i][k]['current'] = v_curr
+                    self[i][k]['current'] = abs(v_curr)
                 else:
                     self.add_edge(k, i)
-                    self[k][i]['current'] = v_curr
+                    self[k][i]['current'] = abs(v_curr)
 
     def plot(self):
         pos = nx.spring_layout(self)
         nc = ['c' for _ in range(self.number_of_nodes())]
         nc[self.source] = 'g'
         nc[self.target] = 'r'
-
         nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=1000)
         nx.draw_networkx_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'V'), nx.get_node_attributes(self, 'voltage').items())))

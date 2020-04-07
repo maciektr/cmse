@@ -66,3 +66,13 @@ def readSolution(name):
         line = f.readline()
         return line.split()[-1]
 
+
+def read_source(path=None):
+  if path is None:
+    return map(int, input().split())
+
+  f = open(path, "r")
+  r = f.readline().split()
+  if r[0] != 'c':
+    raise Exception("Illegal argument: cannot find source specification in file under path.")
+  return int(r[1]), int(r[2]), int(r[3])
