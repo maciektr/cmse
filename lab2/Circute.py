@@ -83,7 +83,9 @@ class CurrentGraph(nx.DiGraph):
         nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=1000)
         nx.draw_networkx_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'V'), nx.get_node_attributes(self, 'voltage').items())))
-        nx.draw_networkx_edges(self, pos, edge_color='c', arrows=True)
+        nx.draw_networkx_edges(self, pos, edgelist=self.edges(),
+                               edge_color=nx.get_edge_attributes(self, 'current').values(), edge_cmap=plt.cm.Wistia,
+                               width=2, arrows=True, arrowstyle='-|>', arrowsize=20, node_size=1000)
         nx.draw_networkx_edge_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'A'), nx.get_edge_attributes(self, 'current').items())))
         plt.show()
