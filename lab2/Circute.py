@@ -86,15 +86,15 @@ class CurrentGraph(nx.DiGraph):
             map(lambda x: (x[0], str(round(x[1], 2)) + 'A'), nx.get_edge_attributes(self, 'current').items())))
         plt.draw()
 
-    def correct(self, eps=10**-7):
+    def correct(self, eps=10 ** -7):
         in_curr = {}
         out_curr = {}
         for i in self.nodes():
-            for k,v in self[i].items():
-                out_curr[k] = out_curr.get(k,0) + v['current']
+            for k, v in self[i].items():
+                out_curr[k] = out_curr.get(k, 0) + v['current']
                 in_curr[i] = in_curr.get(i, 0) + v['current']
 
-        for k,v in in_curr.items():
+        for k, v in in_curr.items():
             if k == self.source or k == self.target:
                 continue
             if abs(v - out_curr[k]) > eps:

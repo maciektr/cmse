@@ -17,7 +17,7 @@ def read_from_file(pathToFile):
     return Circute(V, L, source, target, emf)
 
 
-def get_random_circute(n, type='erdos', min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5):
+def get_random_circute(n, type='general', min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5):
     G = nx.Graph()
     if type == 'erdos':
         G = nx.erdos_renyi_graph(n, density)
@@ -51,7 +51,10 @@ def get_random_circute(n, type='erdos', min_r=1, max_r=1000, min_v=1, max_v=1000
 if __name__ == '__main__':
     path = 'graphs/grid100x100'
     # G = read_from_file(path)
-    G = get_random_circute(20, 'bridge')
+    # G = get_random_circute(20, 'bridge')
+    # G = get_random_circute(20, 'regular3')
+    # G = get_random_circute(20, 'general')
+    G = get_random_circute(20, 'erdos')
     G.plot()
     res = solve(G)
     print("Solution correct: ", res.correct())
