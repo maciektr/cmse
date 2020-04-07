@@ -17,10 +17,29 @@ def read_from_file(pathToFile):
     return Circute(V, L, source, target, emf)
 
 
-def get_random_circute(n, min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5):
-    G = nx.erdos_renyi_graph(n, density)
-    while not nx.is_connected(G):
+def get_random_circute(n, type='erdos', min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5):
+    G = nx.Graph()
+    if type == 'erdos':
         G = nx.erdos_renyi_graph(n, density)
+        while not nx.is_connected(G):
+            G = nx.erdos_renyi_graph(n, density)
+    elif type[:7] == 'regular':
+        d = int(type[7:])
+        G = nx.random_regular_graph(d, n)
+    elif type == 'general':
+        G = nx.dense_gnm_random_graph(n, n ** 2 - n)
+    elif type == 'bridge':
+        A = nx.erdos_renyi_graph(n // 2, density)
+        while not nx.is_connected(A):
+            A = nx.erdos_renyi_graph(n // 2, density)
+        B = nx.erdos_renyi_graph(n // 2, density)
+        while not nx.is_connected(B):
+            B = nx.erdos_renyi_graph(n // 2, density)
+        an = A.number_of_nodes()
+        A.add_nodes_from([an + i for i in B.nodes()])
+        A.add_edges_from([(an + x, an + y) for x, y in B.edges()])
+        A.add_edge(1, an + 1)
+        G = A
     V = len(G.nodes())
     L = []
     for i in G.nodes():
@@ -30,10 +49,11 @@ def get_random_circute(n, min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5)
 
 
 if __name__ == '__main__':
-    path = 'graphs/clique20'
-    G = read_from_file(path)
-    # G = get_random_circute(100)
+    path = 'graphs/grid100x100'
+    # G = read_from_file(path)
+    G = get_random_circute(20, 'bridge')
     G.plot()
     res = solve(G)
+    print("Solution correct: ", res.correct())
     res.plot()
     plt.show()
