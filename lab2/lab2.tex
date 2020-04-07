@@ -88,13 +88,14 @@ Laboratorium II}
          
         
     \section{Analiza obwodu elektrycznego}
-        % Napisz program, który:
-        % a) Wczytuje z pliku listę krawędzi grafu opisującego obwód elektryczny. Wagi krawę-
-        % dzi określają opór fragmentu obwodu między dwoma węzłami. Wierzchołki grafu
-        % identyfikowane są przez liczby naturalne.
-        % b) Wczytuje dodatkowo trójkę liczb (s, t, E), przy czym para (s, t) wskazuje mię-
-        % dzy którymi węzłami sieci przyłożono siłę elektromotoryczną E. Opór wewnętrzny
-        % SEM można zaniedbać.
+        Przygotowałem program analizujący natężenie prądu przepływającego w zadanym obwodzie elektrycznym. Obwód przyjmuje jako graf ważony, nieskierowany o wagach krawędzi oznaczających ich rezystancję. Dodatkowo w grafie wyróżnione zostały dwa węzły, pomiędzy którymi przyłożono znaną siłę elektromotoryczną. \\
+        Wynikiem analizy natężeń jest ważony graf skierowany, gdzie wagami krawędzi są natężenia płynącego nimi prądu. Dodatkowo w węzłach grafu oznaczam jego napięcie względem wierzchołka źródłowego.\\
+        Do implementacji programu wykorzystałem bibliotekę \textit{networkx}, reprezentując powyżej określone struktury jako pochodne klas \textit{nx.Graph} i \textit{nx.DiGraph}. Dodatkowo przygotowałem wizualizację obu grafów przy wykorzystaniu biblioteki \textit{matplotlib}. W analizie natężeń wykorzystałem także funkcję \textit{numpy.linalg.solve} odpowiadającą za rozwiązanie układu równań liniowych.\\
+        Zaimplementowałem także funkcję sprawdzającą poprawność uzyskanych wyników. Za poprawny uznaje się graf wynikowy, w którym suma natężeń prądów wychodzących z węzła, jest równa sumie natężeń prądów wchodzących. \\
+        Program umożliwia wczytanie układu z pliku, lub wygenerowanie losowego przykładu. Przygotowałem zbiór przykładowych układów dla celów testowych, znajdujących się w folderze graphs. Funkcja losująca umożliwia wybór typu generowanego grafu, w tym graf regularny i graf z pojedynczym mostkiem. Ze względu na wydajność funkcji generującej wizualizację, dla grafów o dużej liczbie wierzchołków (rzędu kilku tysięcy) warto ograniczyć się do sprawdzenia poprawności wyniku. \\
+        
+        
+        
         
         
 
