@@ -85,7 +85,13 @@ Laboratorium II}
     \section{Faktoryzacja LU}
         % Napisz i sprawdź funkcję dokonującą faktoryzacji A = LU macierzy A. Zastosuj częściowe poszukiwanie elementu wiodącego oraz skalowanie.
         Następnie przygotowałem implementację prostej faktoryzacji LU macierzy, korzystając z algorytmu Gaussa. Zastosowałem przygotowaną wcześniej normalizację macierzy i częściowe poszukiwanie elementu wiodącego. Poprawność faktoryzacji sprawdziłem mnożąc ze sobą wynikowe macierze L i U. 
-         
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=9cm]{lab2/img/decomp_1.png}}
+            \subfloat[]{\includegraphics[width=9cm]{lab2/img/decomp_2.png}}
+            \caption{Przykładowy wynik działania programu.}
+        \end{figure}\\
+
         
     \section{Analiza obwodu elektrycznego}
         Przygotowałem program analizujący natężenie prądu przepływającego w zadanym obwodzie elektrycznym. Obwód przyjmuje jako graf ważony, nieskierowany o wagach krawędzi oznaczających ich rezystancję. Dodatkowo w grafie wyróżnione zostały dwa węzły, pomiędzy którymi przyłożono znaną siłę elektromotoryczną. \\
@@ -93,7 +99,18 @@ Laboratorium II}
         Do implementacji programu wykorzystałem bibliotekę \textit{networkx}, reprezentując powyżej określone struktury jako pochodne klas \textit{nx.Graph} i \textit{nx.DiGraph}. Dodatkowo przygotowałem wizualizację obu grafów przy wykorzystaniu biblioteki \textit{matplotlib}. W analizie natężeń wykorzystałem także funkcję \textit{numpy.linalg.solve} odpowiadającą za rozwiązanie układu równań liniowych.\\
         Zaimplementowałem także funkcję sprawdzającą poprawność uzyskanych wyników. Za poprawny uznaje się graf wynikowy, w którym suma natężeń prądów wychodzących z węzła, jest równa sumie natężeń prądów wchodzących. \\
         Program umożliwia wczytanie układu z pliku, lub wygenerowanie losowego przykładu. Przygotowałem zbiór przykładowych układów dla celów testowych, znajdujących się w folderze graphs. Funkcja losująca umożliwia wybór typu generowanego grafu, w tym graf regularny i graf z pojedynczym mostkiem. Ze względu na wydajność funkcji generującej wizualizację, dla grafów o dużej liczbie wierzchołków (rzędu kilku tysięcy) warto ograniczyć się do sprawdzenia poprawności wyniku. \\
-        
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Losowy graf Erdosza o 10 wierzchołkach ]{\includegraphics[width=17cm]{lab2/img/erdos.png}}\\
+            \subfloat[Graf o 10 wierzchołkach]{\includegraphics[width=17cm]{lab2/img/pp10.png}}\\
+            \caption{Przykładowy wynik działania programu.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Graf o jednym mostku i 20 wierzchołkach]{\includegraphics[width=17cm]{lab2/img/bridge.png}}
+            \subfloat[Graf 3-regularny o 20 wierzchołkach]{\includegraphics[width=17cm]{lab2/img/reg3.png}}
+            \caption{Przykładowy wynik działania programu.}
+        \end{figure}\\
         
         
         
