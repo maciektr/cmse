@@ -1,19 +1,14 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-import dimacs
 
 
 class Circute(nx.Graph):
-    def __init__(self, pathToFile):
+    def __init__(self, V, L, source, target, emf):
         super().__init__()
-        source, target, emf = dimacs.read_source(pathToFile)
-        V, L = dimacs.loadWeightedGraph(pathToFile)
         self.add_nodes_from([i for i in range(0, V)])
-        self.add_edges_from([(x - 1, y - 1) for (x, y, z) in L])
+        self.add_edges_from([(x, y) for (x, y, z) in L])
         for (x, y, z) in L:
-            x -= 1
-            y -= 1
             self[x][y]['resistance'] = z
         U = {}
         for i in range(0, V):
@@ -26,7 +21,7 @@ class Circute(nx.Graph):
         self.emf = emf
 
     def findVoltages(self):
-        n = self.number_of_edges()
+        n = self.number_of_nodes()
         eq = np.zeros(shape=(n, n))
         free = np.zeros(shape=(n, 1))
         for i in self.nodes:
@@ -68,7 +63,7 @@ class CurrentGraph(nx.DiGraph):
         for i in circute.nodes:
             for k, v in circute[i].items():
                 v_curr = (circute.nodes[i]['voltage'] - circute.nodes[k]['voltage']) / v['resistance']
-                if v_curr > 0.:
+                if v_curr > 0:
                     self.add_edge(i, k)
                     self[i][k]['current'] = abs(v_curr)
                 else:
@@ -81,6 +76,7 @@ class CurrentGraph(nx.DiGraph):
         nc[self.source] = 'g'
         nc[self.target] = 'r'
         plt.figure("Solved circute", figsize=(10, 10))
+        nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=900)
         nx.draw_networkx_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'V'), nx.get_node_attributes(self, 'voltage').items())))
         nx.draw_networkx_edges(self, pos, edgelist=self.edges(),
