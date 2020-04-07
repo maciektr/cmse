@@ -1,4 +1,4 @@
-c solution = 64
+c 1 2 100
 p edge 100 701
 e 1 2 27
 e 1 3 46

@@ -1,4 +1,4 @@
-c solution = 4
+c 1 2 100
 p edge 10 32
 e 1 5 2
 e 1 6 4
