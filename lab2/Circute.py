@@ -46,7 +46,7 @@ class Circute(nx.Graph):
         nc = ['c' for _ in range(self.number_of_nodes())]
         nc[self.source] = 'g'
         nc[self.target] = 'r'
-
+        plt.figure("Circute", figsize=(10, 10))
         nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=1000)
         ids = dict([])
         for i in self.nodes():
@@ -55,7 +55,7 @@ class Circute(nx.Graph):
         nx.draw_networkx_edges(self, pos, edge_color='c')
         nx.draw_networkx_edge_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'Ω'), nx.get_edge_attributes(self, 'resistance').items())))
-        plt.show()
+        plt.draw()
 
 
 class CurrentGraph(nx.DiGraph):
@@ -80,7 +80,7 @@ class CurrentGraph(nx.DiGraph):
         nc = ['c' for _ in range(self.number_of_nodes())]
         nc[self.source] = 'g'
         nc[self.target] = 'r'
-        nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=1000)
+        plt.figure("Solved circute", figsize=(10, 10))
         nx.draw_networkx_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'V'), nx.get_node_attributes(self, 'voltage').items())))
         nx.draw_networkx_edges(self, pos, edgelist=self.edges(),
@@ -88,4 +88,4 @@ class CurrentGraph(nx.DiGraph):
                                width=2, arrows=True, arrowstyle='-|>', arrowsize=20, node_size=1000)
         nx.draw_networkx_edge_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'A'), nx.get_edge_attributes(self, 'current').items())))
-        plt.show()
+        plt.draw()
