@@ -47,19 +47,11 @@ def random_with_ratio(singularity_ratio=100):
 
 if __name__ == '__main__':
     # Ex. 1
-    # sphere = get_unit_sphere()
-    # plot_ellipsoid(sphere, 'Sphere')
+    sphere = get_unit_sphere()
+    plot_ellipsoid(sphere, 'Sphere')
 
     # Ex. 2
     b = np.random.rand(3, 3)
-    u, s, vh = np.linalg.svd(b)
-    print(u.shape)
-    print(u)
-    print(s.shape)
-    print(s)
-    print(vh.shape)
-    print(vh)
-    '''
     plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a), "First ellipsoid")
 
     a = np.random.rand(3, 3)
@@ -77,11 +69,7 @@ if __name__ == '__main__':
 
     # Ex. 5
     u, s, vh = np.linalg.svd(b)
-    print(u.shape)
-    print(s.shape)
-    print(vh.shape)
     s = np.diag(s)
     plot_ellipsoid(transform_sphere(sphere, vh))
     plot_ellipsoid(transform_sphere(sphere, s @ vh))
     plot_ellipsoid(transform_sphere(sphere, u @ s @ vh))
-'''
