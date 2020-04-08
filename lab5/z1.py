@@ -36,15 +36,30 @@ def plot_ellipsoid(v: np.array, svd=None, title='Ellipsoid'):
     plt.show()
 
 
+def random_with_ratio(singularity_ratio=100):
+    a = np.random.rand(3, 3)
+    svd = np.linalg.svd(a)
+    while (np.max(svd[1]) / np.min(svd[1])) < singularity_ratio:
+        a = np.random.rand(3, 3)
+        svd = np.linalg.svd(a)
+    return a
+
+
 if __name__ == '__main__':
     sphere = get_unit_sphere()
     # plot_ellipsoid(sphere, 'Sphere')
 
-    a = np.random.uniform(-1, 1, (3, 3))
-    plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a))
+    # a = np.random.rand(3,3)
+    # plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a), "First ellipsoid")
+
+    # a = np.random.rand(3,3)
+    # plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a), "Second ellipsoid")
 
     # a = np.random.uniform(-1, 1, (3, 3))
-    # plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a))
-    #
-    # a = np.random.uniform(-1, 1, (3, 3))
-    # plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a))
+    # plot_ellipsoid(transform_sphere(sphere, a), np.linalg.svd(a), "Third ellipsoid")
+
+    a = random_with_ratio()
+    svd = np.linalg.svd(a)
+    ratio = np.max(svd[1]) / np.min(svd[1])
+    print("Matrix singularity ratio: ", ratio)
+    plot_ellipsoid(transform_sphere(sphere, a), svd, "Singularity ratio "+str(round(ratio,2)))
