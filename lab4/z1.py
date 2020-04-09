@@ -77,7 +77,7 @@ def sannealing(points, choose, steps, temp, alpha, history=None):
     while steps > 0 and temp > 1e-8:
         neigh = choose(points)
         neigh_loss = loss(neigh)
-        if  best['loss'] > neigh_loss:
+        if best['loss'] > neigh_loss:
             best['loss'] = neigh_loss
             best['points'] = list(neigh)
 
@@ -108,24 +108,46 @@ def get_points(n=20, v=1000, type='uniform'):
                 x += 2 * k
             y += 2 * k
         return res
-    return [[random.uniform(-v, v), random.uniform(-v, v)] for _ in range(n // 2)]
+    return [[random.uniform(-v, v), random.uniform(-v, v)] for _ in range(n)]
 
 
 if __name__ == '__main__':
-    n = 100
-    v = 10000
-    points = get_points(n, v, 'uniform')
+    n = 500
+    v = 1000
+    # points = get_points(n, v, 'groups')
+    points = [[random.uniform(-1000, 1000), random.uniform(-1000, 1000)] for i in range(100)]
     # draw_solution(points)
 
     points = greedy_init(points)
-    # draw_solution(points)
+    draw_solution(points)
 
     init_loss = loss(points)
     hist = {'list': [], 'copy': False, 'all': False}
 
-    points = sannealing(points, consecutive_swap, 100000, math.sqrt(len(points)), 0.995, hist)
-    # draw_solution(points)
+    points = sannealing(points, arbitrary_swap, 5000, math.sqrt(n), 0.995, hist)
+    draw_solution(points)
 
     # plot_history.plot_anim(hist)
     plot_history.plot_loss(hist)
     print("Obtained ", str(round(100 * (init_loss - loss(points)) / init_loss, 2)), "% improvement over initial state.")
+
+    ########## Test swap functions ##########
+    # ns = [100,500,1000]
+    # typs = ['uniform', 'normal', 'groups']
+    # for n in ns:
+    #     for t in typs:
+    #         print("N: ", n, " Type: ", t)
+    #         points = get_points(n, v, t)
+    #         init_loss = loss(points)
+    #         p = list(points)
+    #         p = sannealing(p, arbitrary_swap, 100000, 31, 0.995, None)
+    #         arb_per = str(round(100 * (init_loss - loss(p)) / init_loss, 2))
+    #
+    #         p = list(points)
+    #         p = sannealing(p, consecutive_swap, 100000, 31, 0.995, None)
+    #         con_per = str(round(100 * (init_loss - loss(p)) / init_loss, 2))
+    #
+    #         p = list(points)
+    #         p = sannealing(p, reverse_swap, 100000, 31, 0.995, None)
+    #         rev_per = str(round(100 * (init_loss - loss(p)) / init_loss, 2))
+    #         print("Arbitrary: ", arb_per, "% Consec: ", con_per, "% Rev: ", rev_per, "%")
