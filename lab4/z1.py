@@ -34,7 +34,9 @@ def consecutive_swap(points):
 def flip_swap(points):
     x = randint(0, len(points) - 1)
     y = randint(0, len(points) - 1)
-    points[x:y] = np.flip(points[x:y])
+    if y < x:
+        x, y = y, x
+    points[x:y] = np.flip(points[x:y], axis=0)
     return points
 
 
@@ -45,23 +47,34 @@ def arbitrary_swap(points):
     return points
 
 
-# def greedy_init(points):
+def greedy_init(points):
+    for i in range(1, len(points) - 1):
+        for k in range(i + 1, len(points)):
+            if dist(points[i - 1], points[k]) < dist(points[i - 1], points[i]):
+                points[[i, k]] = points[[k, i]]
+    return points
 
 
 def sannealing(points, choose, steps, temp, alpha, history=None):
+    best = {'points':[],'loss':np.inf}
     n = steps
-    while steps > 0 and temp > 0:
+    t0 = temp
+    while steps > 0 and temp > 1e-8:
         neigh = choose(points.copy())
-        d = loss(points) - loss(neigh)
-        if d > 0 or np.random.rand(1) <= np.exp(d / temp):
+        n_los = loss(neigh)
+        d = loss(points) - n_los
+        if n_los < best['loss']:
+            best['loss'] = n_los
+            best['points'] = neigh.copy()
+        if d > 0 or np.random.rand(1) <= np.exp(-abs(d) / temp):
             points = neigh
-            if history is not None and history['all'] == False:
+            if history is not None and history['all'] is False:
                 history['list'].append({'id': n - steps,
                                         'loss': round(loss(points), 2),
                                         'points': None if not history['copy'] else np.concatenate(
                                             (points, np.array([points[0]])))
                                         })
-        if history is not None and history['all'] == True:
+        if history is not None and history['all'] is True:
             history['list'].append({'id': n - steps,
                                     'loss': round(loss(neigh), 2),
                                     'points': None if not history['copy'] else np.concatenate(
@@ -69,7 +82,7 @@ def sannealing(points, choose, steps, temp, alpha, history=None):
                                     })
         steps -= 1
         temp *= alpha
-    return points
+    return best['points']
 
 
 def get_points(n=20, v=1000, type='uniform'):
@@ -92,15 +105,17 @@ def get_points(n=20, v=1000, type='uniform'):
 
 
 if __name__ == '__main__':
-    n = 500
+    n = 100
     v = 10000
-    points = get_points(n, v, 'groups')
+    points = get_points(n, v, 'uniform')
     draw_solution(points)
     hist = {'list': [], 'copy': False, 'all': True}
     # hist = None
-    # print(loss(points))
-    points = sannealing(points, consecutive_swap, 4000, 200, 0.9994, hist)
-    # print(loss(points))
+    points = greedy_init(points)
+    los = loss(points)
+    draw_solution(points)
+    points = sannealing(points, flip_swap, 100000, 22, 0.995, hist)
     draw_solution(points)
     # plot_history.plot_anim(hist)
     plot_history.plot_loss(hist)
+    print("Obtained ", str(round(100 * (los - loss(points)) / los, 2)), "% improvement over greedy.")
