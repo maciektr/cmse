@@ -24,16 +24,27 @@ def loss(points: np.array):
 
 
 def consecutive_swap(points: np.array):
-    x = randint(0, len(points))
+    x = randint(0, len(points)-1)
     y = (x + 1) % len(points)
     points[[x, y]] = points[[y, x]]
     return points
 
 
 def arbitrary_swap(points: np.array):
-    x = randint(0, len(points))
-    y = randint(0, len(points))
+    x = randint(0, len(points)-1)
+    y = randint(0, len(points)-1)
     points[[x, y]] = points[[y, x]]
+    return points
+
+
+def sannealing(points, choose, temp, steps, alpha):
+    while steps > 0 and temp > 0:
+        neigh = choose(points.copy())
+        d = loss(points) - loss(neigh)
+        if d > 0 or np.random.rand(1) <= np.exp(d/temp):
+            points = neigh
+        steps -= 1
+        temp *= alpha
     return points
 
 
@@ -42,7 +53,5 @@ if __name__ == '__main__':
     v = 1000
     points = np.random.uniform(-v, v, (n, 2))
     draw_solution(points)
-    print(loss(points))
-    arbitrary_swap(points)
+    points = sannealing(points, arbitrary_swap, 100, 5000, 0.9994)
     draw_solution(points)
-    print(loss(points))
