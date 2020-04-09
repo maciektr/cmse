@@ -61,10 +61,6 @@ Laboratorium IV}
         
         
         Przykładowe wyniki działania programu:
-        % n100 t20 uni : 25.52 %
-        % n500 t20 uni: 20.72%
-        % n 1000 t31 uni : 20.69%
-
         \begin{figure}[h!]
             \centering
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_uni_pre.png}}
@@ -87,5 +83,85 @@ Laboratorium IV}
             \caption{Rozkład jednostajny, $1000$ punktów, temperatura $31$, optymalizacja trasy $20.69\%$}
         \end{figure}\\
         
+        
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_norm_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_norm_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_norm_2.png}}
+            \caption{Rozkład normalny, $100$ punktów, temperatura $20$, optymalizacja trasy $18.38\%$}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_norm_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_norm_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_norm_2.png}}
+            \caption{Rozkład normalny, $500$ punktów, temperatura $20$, optymalizacja trasy $24.2\%$}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_norm_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_norm_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_norm_2.png}}
+            \caption{Rozkład normalny, $1000$ punktów, temperatura $31$, optymalizacja trasy $21.41\%$}
+        \end{figure}\\
 
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_grp_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_grp_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_grp_2.png}}
+            \caption{Rozkład grupowy, $100$ punktów, temperatura $20$, optymalizacja trasy $21.87\%$}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_grp_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_grp_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_grp_2.png}}
+            \caption{Rozkład grupowy, $500$ punktów, temperatura $20$, optymalizacja trasy $8.14\%$}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_grp_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_grp_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_grp_2.png}}
+            \caption{Rozkład grupowy, $1000$ punktów, temperatura $31$, optymalizacja trasy $3.67\%$}
+        \end{figure}\\
+        
+        \FloatBarrier
+        Następnie porównałem obliczoną minimalizację funkcji kosztu w zależności od sposobu generacji stanu sąsiedniego, otrzymując poniższe wyniki (\textit{Arbitrary} - funkcja zamieniająca dwa losowe indeksy, \textit{Consecutive} - funkcja zamieniająca dwa kolejne elementy, \textit{Reverse} - funkcja odwracająca losowy fragment). 
+        \begin{center}
+            \begin{table}[ht]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    Dane & Arbitrary & Consecutive & Reverse \\
+                    \specialrule{1pt}{1pt}{1pt}
+                    Rozkład jednostajny, $N=100$ & $72.11\%$ & $26.45\%$& \cellcolor{green!40}$78.8\%$\\
+                    \hline
+                    Rozkład normalny, $N=100$ & $61.79\%$ & $17.72\%$& \cellcolor{green!40}$71.34\%$\\
+                    \hline 
+                    Rozkład grupowy, $N=100$ & \cellcolor{green!40}$22.32\%$ & $20.51\%$& $21.36\%$\\
+                    \hline
+                    Rozkład jednostajny, $N=500$ & $51.06\%$ & $25.2\%$&\cellcolor{green!40} $60.31\%$\\
+                    \hline 
+                    Rozkład normalny, $N=500$ & $47.79\%$ & $21.84\%$&\cellcolor{green!40} $53.97\%$\\
+                    \hline 
+                    Rozkład grupowy, $N=500$ & $7.81\%$ & \cellcolor{green!40}$18.91\%$& $5.61\%$\\
+                    \hline 
+                    Rozkład jednostajny, $N=1000$ & $44.28\%$ & $22.61\%$&\cellcolor{green!40} $48.16\%$\\
+                    \hline 
+                    Rozkład normalny, $N=1000$ & $38.59\%$ & $19.67\%$&\cellcolor{green!40} $43.43\%$\\
+                    \hline 
+                    Rozkład grupowy, $N=1000$ & $4.92\%$ & \cellcolor{green!40}$14.8\%$& $3.5\%$\\
+                    \hline 
+                \end{tabular}
+                \caption{Porównanie efektywności działania funkcji.}
+                \label{tab:my_label}
+            \end{table}
+        \end{center}
+        
+        \FloatBarrier
+przygotowującą zachłanne przybliżenie problemu komiwojażera stosującą heurystykę najbliższego kroku. Dla tak zainicjalizowanych danych przeprowadziłem próbę skuteczności zaimplementowanego algorytmu wyżarzania. 
+        
 \end{document}
