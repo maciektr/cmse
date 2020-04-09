@@ -10,10 +10,10 @@ def plot_anim(history, out_path='history.gif'):
     ax.set_xlabel('x')
 
     ax.set_title('step=' + str(history['list'][0]['id']) + ' loss=' + str(history['list'][0]['loss']))
-    line = ax.plot(*history['list'][0]['points'].T, marker='o')[0]
+    line = ax.plot(*zip(*history['list'][0]['points']), marker='o')[0]
 
     def animate(i):
-        line.set_data(*history['list'][i]['points'].T)
+        line.set_data(*zip(*history['list'][i]['points']))
         ax.set_title('step=' + str(history['list'][i]['id']) + ' loss=' + str(history['list'][i]['loss']))
 
     anim = FuncAnimation(fig, animate, interval=100, frames=len(history['list']))
