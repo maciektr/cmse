@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from random import randint
+import plot_history
 import numpy as np
 
 
@@ -24,34 +25,50 @@ def loss(points: np.array):
 
 
 def consecutive_swap(points: np.array):
-    x = randint(0, len(points)-1)
+    x = randint(0, len(points) - 1)
     y = (x + 1) % len(points)
     points[[x, y]] = points[[y, x]]
     return points
 
 
+def flip_swap(points: np.array):
+    x = randint(0, len(points) - 1)
+    y = randint(0, len(points) - 1)
+    points[x:y] = np.flip(points[x:y])
+    return points
+
+
 def arbitrary_swap(points: np.array):
-    x = randint(0, len(points)-1)
-    y = randint(0, len(points)-1)
+    x = randint(0, len(points) - 1)
+    y = randint(0, len(points) - 1)
     points[[x, y]] = points[[y, x]]
     return points
 
 
-def sannealing(points, choose, temp, steps, alpha):
+def sannealing(points: np.array, choose, steps, temp, alpha, history=None, copy=False):
+    n = steps
     while steps > 0 and temp > 0:
         neigh = choose(points.copy())
         d = loss(points) - loss(neigh)
-        if d > 0 or np.random.rand(1) <= np.exp(d/temp):
+        if d > 0 or np.random.rand(1) <= np.exp(d / temp):
             points = neigh
+            if history is not None:
+                history.append({'id': n - steps,
+                                'loss': round(loss(points), 2),
+                                'points': None if not copy else np.concatenate((points, np.array([points[0]])))
+                                })
         steps -= 1
         temp *= alpha
     return points
 
 
 if __name__ == '__main__':
-    n = 20
-    v = 1000
+    n = 1000
+    v = 100000
     points = np.random.uniform(-v, v, (n, 2))
     draw_solution(points)
-    points = sannealing(points, arbitrary_swap, 100, 5000, 0.9994)
+    hist = []
+    points = sannealing(points, arbitrary_swap, 1000, 100, 0.9994, hist)
     draw_solution(points)
+    # plot_history.plot_anim(hist)
+    plot_history.plot_loss(hist)
