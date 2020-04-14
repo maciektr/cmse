@@ -57,8 +57,7 @@ def cost_function(img, adjacency, energy, changed=None, prev_img=None, prev_cost
     else:
         res = prev_cost
         for pos in changed:
-            adj = adjacency(pos[0], pos[1], 20)
-            for ind in adj:
+            for ind in adjacency(pos[0], pos[1], n):
                 res -= energy(prev_img, pos[0], pos[1], ind[0], ind[1])
                 res += energy(img, pos[0], pos[1], ind[0], ind[1])
 
@@ -126,7 +125,7 @@ if __name__ == '__main__':
     after_path = 'img2.png'
     # density = [0.1, 0.3, 0.4]
 
-    n = 32
+    n = 128
     density = 0.4
     steps = 50000
     temp = 80
