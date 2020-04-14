@@ -11,7 +11,7 @@ def random_binary(n, density):
     img[:int(n ** 2 * density)] = 0
     np.random.shuffle(img)
     img.shape = (n, n)
-    return img
+    return img.tolist()
 
 
 def adjacent_filter(ind, n=None):
@@ -46,9 +46,9 @@ def adjacent_sixteen_eight(x, y):
 
 def cost_function(img, adjacency, energy):
     res = 0
-    n, m = img.shape
-    for x in range(n-1):
-        for y in range(m-1):
+    n = len(img)
+    for x in range(n - 1):
+        for y in range(n - 1):
             for ind in adjacency(x, y, n):
                 res += energy(img, x, y, ind[0], ind[1])
     return res
@@ -59,25 +59,25 @@ def dist(x, y, k, m):
 
 
 def energy_simple(img, x, y, k, m):
-    d = dist(x,y,k,m)
+    d = dist(x, y, k, m)
     if img[x][y] == img[k][m]:
-        return 5/d
+        return 5 / d
     return 0
 
 
 def choose_img(img):
     # arbitrary swap
-    img = img.copy()
-    n, m = img.shape
-    x, y = randint(0, n - 1), randint(0, m - 1)
-    k, m = randint(0, n - 1), randint(0, m - 1)
-    img[((x, y), (k, m))] = img[((k, m), (x, y))]
+    img = list(img)
+    n = len(img)
+    x, y = randint(0, n - 1), randint(0, n - 1)
+    k, m = randint(0, n - 1), randint(0, n - 1)
+    img[x][y], img[k][m] = img[k][m], img[x][y]
     return img
 
 
 def annealing(img, adjacency, energy, steps, temp, alpha):
     cost = cost_function(img, adjacency, energy)
-    best = {'img': img.copy(), 'cost': cost}
+    best = {'img': list(img), 'cost': cost}
 
     while steps > 0 and temp > 1e-8:
         print('step')
@@ -85,7 +85,7 @@ def annealing(img, adjacency, energy, steps, temp, alpha):
         new_cost = cost_function(new_img, adjacency, energy)
         if best['cost'] > new_cost:
             best['cost'] = new_cost
-            best['img'] = new_img.copy()
+            best['img'] = list(new_img)
 
         diff = cost - new_cost
         if diff > 0 or random.random() <= math.exp(-abs(diff) / temp):
