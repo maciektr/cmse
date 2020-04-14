@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import plot_history
 from random import randint
 import numpy as np
 import imageio
@@ -70,35 +71,38 @@ def dist(x, y, k, m):
 
 def energy_simple(img, x, y, k, m):
     d = dist(x, y, k, m)
-    if img[x][y] == img[k][m] == 1:
-        return -5 / d
+    if img[x][y] == img[k][m]:
+        return 5 / d
     return 0
 
 
 def choose_img(img):
     # arbitrary swap
-    img = list(img)
-    n = len(img)
+    res = [list(i.copy()) for i in img]
+    n = len(res)
     x, y = randint(0, n - 1), randint(0, n - 1)
     k, m = randint(0, n - 1), randint(0, n - 1)
-    img[x][y], img[k][m] = img[k][m], img[x][y]
-    return img, [(x, y), (k, m)]
+    res[x][y] = img[k][m]
+    res[k][m] = img[x][y]
+    return res, [(x, y), (k, m)]
 
 
-def hist_update(img, cost, history):
+def hist_update(img, cost, step, history):
     if history is not None:
-        history['list'].append({'id': id,
-                                'loss': round(neigh_loss, 2),
-                                'points': None if not history['copy'] else list(neigh) + [neigh[0]]
-                                })
+        history['list'].append({'id': step, 'img': img, 'loss': cost})
 
 
 def annealing(img, adjacency, energy, steps, temp, alpha, hist=None):
     cost = cost_function(img, adjacency, energy)
     best = {'img': list(img), 'cost': cost}
 
+    step_0 = steps
     while steps > 0 and temp > 1e-8:
         new_img, changed = choose_img(img)
+        # print(changed, img[changed[0][0]][changed[0][1]], img[changed[1][0]][changed[1][1]],
+        #       new_img[changed[0][0]][changed[0][1]], new_img[changed[1][0]][changed[1][1]])
+        # print(new_img == img)
+
         new_cost = cost_function(new_img, adjacency, energy, changed, img, cost)
         if best['cost'] > new_cost:
             best['cost'] = new_cost
@@ -108,7 +112,7 @@ def annealing(img, adjacency, energy, steps, temp, alpha, hist=None):
         if diff > 0 or random.random() <= math.exp(-abs(diff) / temp):
             img = new_img
             cost = new_cost
-
+            hist_update(img, cost, step_0 - steps, hist)
             # hist_update(history, steps_0 - steps, neigh_loss, neigh, False)
         # hist_update(history, steps_0 - steps, neigh_loss, neigh, True)
         steps -= 1
@@ -124,14 +128,23 @@ if __name__ == '__main__':
 
     n = 32
     density = 0.4
-    steps = 2500
+    steps = 50000
     temp = 80
     alpha = 0.9995
 
     img = random_binary(n, density)
     imageio.imsave(before_path, img)
 
-    hist = {'list':[]}
-    annealing(img, adjacent_eight, energy_simple, steps, temp, alpha, hist)
+    hist = {'list': []}
+    img = annealing(img, adjacent_eight, energy_simple, steps, temp, alpha, hist)
+    plot_history.plot_loss(hist)
 
     imageio.imsave(after_path, img)
+
+    # new_img, changed = choose_img(img)
+    # print(id(new_img), id(img))
+    # print(new_img == img)
+    # x, y = changed[0]
+    # k, m = changed[1]
+    # print(new_img[x][y], new_img[k][m])
+    # print(img[x][y], img[k][m])
