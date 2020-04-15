@@ -58,8 +58,6 @@ Laboratorium IV}
     \maketitle
     \section{Problem komiwojażera}
         W ramach zadania zaimplementowałem program szukający optymalnej ścieżki w problemie komiwojażera dla losowych punktów na płaszczyźnie dwuwymiarowej. Przetestowałem go dla punktów losowanych z rozkładu jednostajnego, normalnego i podzielonych na 9 odseparowanych grup. 
-        
-        
         Przykładowe wyniki działania programu:
         \begin{figure}[h!]
             \centering
@@ -82,8 +80,6 @@ Laboratorium IV}
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_uni_plot.png}}
             \caption{Rozkład jednostajny, $1000$ punktów, temperatura $31$, optymalizacja trasy $20.69\%$}
         \end{figure}\\
-        
-        
         \begin{figure}[h!]
             \centering
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_norm_0.png}}
@@ -105,7 +101,6 @@ Laboratorium IV}
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_norm_2.png}}
             \caption{Rozkład normalny, $1000$ punktów, temperatura $31$, optymalizacja trasy $21.41\%$}
         \end{figure}\\
-
         \begin{figure}[h!]
             \centering
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n100_t20_grp_0.png}}
@@ -120,6 +115,7 @@ Laboratorium IV}
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n500_t20_grp_2.png}}
             \caption{Rozkład grupowy, $500$ punktów, temperatura $20$, optymalizacja trasy $8.14\%$}
         \end{figure}\\
+        \newpage
         \begin{figure}[h!]
             \centering
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_grp_0.png}}
@@ -127,8 +123,9 @@ Laboratorium IV}
             \subfloat[]{\includegraphics[width=6cm]{lab4/img/tsp_n1000_t31_grp_2.png}}
             \caption{Rozkład grupowy, $1000$ punktów, temperatura $31$, optymalizacja trasy $3.67\%$}
         \end{figure}\\
-        
+        % \newpage
         \FloatBarrier
+        
         Następnie porównałem obliczoną minimalizację funkcji kosztu w zależności od sposobu generacji stanu sąsiedniego, otrzymując poniższe wyniki (\textit{Arbitrary} - funkcja zamieniająca dwa losowe indeksy, \textit{Consecutive} - funkcja zamieniająca dwa kolejne elementy, \textit{Reverse} - funkcja odwracająca losowy fragment). 
         \begin{center}
             \begin{table}[ht]
@@ -159,9 +156,71 @@ Laboratorium IV}
                 \caption{Porównanie efektywności działania funkcji.}
                 \label{tab:my_label}
             \end{table}
-        \end{center}
+        \end{center}\\
         
+        % \FloatBarrier
+        Następnie przygotowałem funkcję obliczającą zachłanne przybliżenie problemu komiwojażera stosującą heurystykę najbliższego kroku. Dla tak zainicjalizowanych danych, z użyciem funkcji arbitrary swap, przeprowadziłem próbę skuteczności zaimplementowanego algorytmu wyżarzania, otrzymując dużo niższe procentowe optymalizacje. 
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_1_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_1_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_1_2.png}}
+            \caption{Rozkład normalny, $100$ punktów, temperatura $20$, optymalizacja trasy $3.6\%$}
+        \end{figure}\\
+
+        \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_2.png}}
+            \caption{Rozkład normalny, $100$ punktów, temperatura $20$, optymalizacja trasy $6.1\%$}
+        \end{figure}\\
+        
+    \clearpage
+    \section{Minimalizacja funkcji energii dla obrazu binarnego}
+        Następnie przygotowałem program generujący losowy, kwadratowy, obraz binarny o zadanym rozmiarze i gęstości czarnych punktów.
+        Przygotowałem różne sąsiedztwa punktu, wyznaczające 4; 8; 16; 16+8 sąsiednich punktów w sposób przedstawiony w poniższej tabeli. 
+        \begin{center}
+            \begin{table}[ht]
+                \centering
+                \begin{tabular}{|c|c|c|c|c|}
+                    \hline
+                    16 & 16 & 16 & 16 & 16 \\
+                    \hline
+                    16 & 8 & 8; 4 & 8 & 16\\
+                    \hline
+                    16 & 8; 4 &  & 8; 4 & 16\\
+                    \hline
+                    16 & 8 & 8; 4 & 8 & 16\\
+                    \hline
+                    16 & 16 & 16 & 16 & 16\\
+                    \hline 
+                \end{tabular}
+                \caption{Graficzna reprezentacja sąsiedztwa.}
+                \label{tab:my_label}
+            \end{table}
+        \end{center}\\  
         \FloatBarrier
-przygotowującą zachłanne przybliżenie problemu komiwojażera stosującą heurystykę najbliższego kroku. Dla tak zainicjalizowanych danych przeprowadziłem próbę skuteczności zaimplementowanego algorytmu wyżarzania. 
+        Przygotowałem też różne funkcje energii punktu, opisane poniżej.
+        Niech d będzie odległością punktu sąsiedniego od rozpatrywanego w funkcji energii. 
+        \begin{itemize}
+            \item dist - Jeśli punkt sąsiedni ma tą samą wartość co rozpatrywany, zwraca -d dla punktów o odległości większej niż $\sqrt{2}$, d dla punktów bliższych. W przeciwnym przypadku 0.
+            \item pushpull - Zwraca d jeśli punkt sąsiedni ma tą samą wartość co rozpatrywany, -d w przeciwnym wypadku. 
+            \item diff - Zwraca -d jeśli punkt sąsiedni ma różną od rozpatrywanego wartość, 0 w przeciwnym przypadku. 
+            \item on - Zwraca -d jeśli zarówno punkt sąsiedni jak i rozpatrywany ma wartość 1, 0 w przeciwnym przypadku. 
+        \end{itemize}
+        Tak przygotowany program testowałem z parametrami: Obraz rozmiaru 64x64, ilość kroków algorytmu wyżarzania $10^{12}$, temperatura 80, współczynnik $\alpha = 0.9995$. Następny obraz wyznaczany jest poprzez losową zamianę dwóch dowolnych punktów. Funkcja kosztu obrazu zoptymalizowana jest, by w następnym kroku liczyć wartości tylko w tych polach, które uległy zmianie.\\
+        Przykładowe wyniki działania: 
+                \begin{figure}[h!]
+            \centering
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_0.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_1.png}}
+            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_2.png}}
+            \caption{Sąsiedztwo: , funkcja energii: .}
+        \end{figure}\\
+
+
         
+
+
 \end{document}
