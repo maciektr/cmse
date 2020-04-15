@@ -7,7 +7,19 @@ class Sudoku:
         self.size = 9
         self.board = [[None for _ in range(self.size)] for _ in range(self.size)]
         self.cost_value = None
-        self.miss = None
+        self.mutable = []
+
+    def initialize(self):
+        self.mutable = []
+        for i in range(self.size):
+            for k in range(self.size):
+                if self.board[i][k] is None:
+                    self.mutable.append((i, k))
+        missing = list(self.missing())
+        m = len(missing) - 1
+        for x, y in self.mutable:
+            self.board[x][y] = missing[m]
+            m -= 1
 
     def read_from_file(self, path):
         with open(path, 'r') as f:
@@ -16,6 +28,7 @@ class Sudoku:
                 self.board[i] = list(
                     map(lambda x: int(x) if x != 'x' else None, line.split()))
                 i += 1
+        self.initialize()
 
     def print(self):
         for r in self.board:
@@ -77,12 +90,13 @@ class Sudoku:
                 res += con
         else:
             res = previous.cost()
-            x, y = changed
-            res -= previous.col_row_cost(x, y)
-            res += self.col_row_cost(x, y)
-            bid = Sudoku.block_id(changed)
-            res -= previous.get_from_block(bid)[1]
-            res += self.get_from_block(bid)[1]
+            for ch in changed:
+                x, y = ch
+                res -= previous.col_row_cost(x, y)
+                res += self.col_row_cost(x, y)
+                bid = Sudoku.block_id(ch)
+                res -= previous.get_from_block(bid)[1]
+                res += self.get_from_block(bid)[1]
         self.cost_value = res
         return res
 
@@ -92,13 +106,14 @@ class Sudoku:
         res.cost_value = self.cost_value
         return res
 
-    def next(self):
-        x, y = randint(0, self.size - 1), randint(0, self.size - 1)
-        res = self.copy()
-        res.board[x][y] = randint(1, 9)
-        res.cost_value = None
-        res.miss = None
-        return res, (x, y)
+    # def next_random(self):
+    #     # x, y = randint(0, self.size - 1), randint(0, self.size - 1)
+    #     x, y = self.mutable[randint(0, len(self.mutable) - 1)]
+    #     res = self.copy()
+    #     res.board[x][y] = randint(1, 9)
+    #     res.cost_value = None
+    #     res.mutable = self.mutable
+    #     return res, (x, y)
 
     def col_row_missing(self, x, y):
         res = []
@@ -114,39 +129,23 @@ class Sudoku:
                 res.append(num)
         return res
 
-    def missing(self, changed=None, previous=None):
-        if self.miss is not None:
-            return self.miss
+    def missing(self):
         self.miss = multiset.Multiset()
-        if changed is None:
-            seen_col = [set() for _ in range(self.size)]
-            for i in range(self.size):
-                seen_row = set()
-                for k in range(self.size):
-                    el = self.board[i][k]
-                    seen_col[k].add(el)
-                    seen_row.add(el)
-                for num in range(1, 9):
-                    if num not in seen_row:
-                        self.miss.add(num)
-            for i in range(self.size):
-                for num in range(1, 9):
-                    if num not in seen_col[i]:
-                        self.miss.add(num)
-            for i in range(0, 8 + 1):
-                el, con = self.get_from_block(i)
-                for num in range(1, 9):
-                    if num not in el:
-                        self.miss.add(num)
-        else:
-            self.miss = previous.missing()
-            x, y = changed
-            self.miss -= previous.col_row_missing(x, y)
-            self.miss += self.col_row_missing(x, y)
-            bid = Sudoku.block_id(changed)
-            prev_block = previous.get_from_block(bid)[0]
-            board_block = self.get_from_block(bid)[0]
+        for i in range(0, 8 + 1):
+            el, con = self.get_from_block(i)
             for num in range(1, 9):
-                if (num not in prev_block) or (num not in board_block):
+                if num not in el:
                     self.miss.add(num)
         return self.miss
+
+    def random_mutable(self):
+        return self.mutable[randint(0, len(self.mutable) - 1)]
+
+    def next(self):
+        x, y = self.random_mutable()
+        k, m = self.random_mutable()
+        res = self.copy()
+        res.board[x][y], res.board[k][m] = res.board[k][m], res.board[x][y]
+        res.cost_value = None
+        res.mutable = self.mutable
+        return res, [(x, y), (k, m)]
