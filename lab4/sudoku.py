@@ -86,9 +86,7 @@ class Sudoku:
 
     def copy(self):
         res = Sudoku()
-        for i in range(0, self.size):
-            for k in range(0, self.size):
-                res.board[i][k] = self.board[i][k]
+        res.board = [list(r) for r in self.board]
         res.cost_value = self.cost_value
         return res
 
@@ -96,4 +94,5 @@ class Sudoku:
         x, y = randint(0, self.size-1), randint(0, self.size-1)
         res = self.copy()
         res.board[x][y] = randint(1, 9)
+        res.cost_value = None
         return res, (x, y)

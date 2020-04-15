@@ -21,6 +21,7 @@ def annealing(sudoku, steps, temp, alpha, hist=None):
     while steps > 0 and temp > 1e-8:
         new_sudoku, changed = sudoku.next()
         new_cost = new_sudoku.cost(changed, sudoku)
+
         if best['cost'] > new_cost:
             best['cost'] = new_cost
             best['img'] = new_sudoku.copy()
@@ -43,7 +44,10 @@ if __name__ == '__main__':
     board.read_from_file(path)
 
     # board.print()
-    # print(board.cost())
+    # new_board, changed = board.next()
+    # print('------')
+    # new_board.print()
+    # print(board.cost(), new_board.cost(changed, board))
 
     steps = 1e12
     temp = 80
