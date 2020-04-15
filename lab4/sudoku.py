@@ -1,3 +1,6 @@
+from random import randint
+
+
 class Sudoku:
     def __init__(self):
         self.size = 9
@@ -87,4 +90,10 @@ class Sudoku:
             for k in range(0, self.size):
                 res.board[i][k] = self.board[i][k]
         res.cost_value = self.cost_value
-        return res  
+        return res
+
+    def next(self):
+        x, y = randint(0, self.size), randint(0, self.size)
+        res = self.copy()
+        res.board[x][y] = randint(1, 9)
+        return res
