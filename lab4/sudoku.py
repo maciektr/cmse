@@ -25,7 +25,7 @@ class Sudoku:
                 self.board[i] = list(
                     map(lambda x: int(x) if x != 'x' else None, line.split()))
                 i += 1
-        self.initialize()
+        # self.initialize()
 
     def print(self):
         for r in self.board:

@@ -1,4 +1,4 @@
-from lab4.sudoku import *
+from sudoku import *
 import plot_history
 import random
 import math
@@ -39,15 +39,12 @@ def annealing(sudoku, steps, temp, alpha, hist=None):
 
 
 if __name__ == '__main__':
-    path = 'boards/b1.txt'
+    path = 'boards/b6.txt'
     board = Sudoku()
     board.read_from_file(path)
-
-    # board.print()
-    # new_board, changed = board.next()
-    # print('------')
-    # new_board.print()
-    # print(board.cost(), new_board.cost(changed, board))
+    print("Problem")
+    board.print()
+    board.initialize()
 
     steps = 1e12
     temp = 400
@@ -56,5 +53,6 @@ if __name__ == '__main__':
     hist = {'list': [], 'copy': None}
     board = annealing(board, steps, temp, alpha, hist)
     plot_history.plot_loss(hist)
+    print("Solved board")
     board.print()
-    print(board.cost())
+    print("Cost: ", board.cost())
