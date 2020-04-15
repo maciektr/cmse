@@ -1,4 +1,5 @@
 from random import randint
+import multiset
 
 
 class Sudoku:
@@ -6,6 +7,7 @@ class Sudoku:
         self.size = 9
         self.board = [[None for _ in range(self.size)] for _ in range(self.size)]
         self.cost_value = None
+        self.miss = None
 
     def read_from_file(self, path):
         with open(path, 'r') as f:
@@ -91,8 +93,60 @@ class Sudoku:
         return res
 
     def next(self):
-        x, y = randint(0, self.size-1), randint(0, self.size-1)
+        x, y = randint(0, self.size - 1), randint(0, self.size - 1)
         res = self.copy()
         res.board[x][y] = randint(1, 9)
         res.cost_value = None
+        res.miss = None
         return res, (x, y)
+
+    def col_row_missing(self, x, y):
+        res = []
+        seen_col = set()
+        seen_row = set()
+        for i in range(0, self.size):
+            col_el = self.board[x][i]
+            row_el = self.board[i][y]
+            seen_col.add(col_el)
+            seen_row.add(row_el)
+        for num in range(1, 9):
+            if (num not in seen_col) or (num not in seen_row):
+                res.append(num)
+        return res
+
+    def missing(self, changed=None, previous=None):
+        if self.miss is not None:
+            return self.miss
+        self.miss = multiset.Multiset()
+        if changed is None:
+            seen_col = [set() for _ in range(self.size)]
+            for i in range(self.size):
+                seen_row = set()
+                for k in range(self.size):
+                    el = self.board[i][k]
+                    seen_col[k].add(el)
+                    seen_row.add(el)
+                for num in range(1, 9):
+                    if num not in seen_row:
+                        self.miss.add(num)
+            for i in range(self.size):
+                for num in range(1, 9):
+                    if num not in seen_col[i]:
+                        self.miss.add(num)
+            for i in range(0, 8 + 1):
+                el, con = self.get_from_block(i)
+                for num in range(1, 9):
+                    if num not in el:
+                        self.miss.add(num)
+        else:
+            self.miss = previous.missing()
+            x, y = changed
+            self.miss -= previous.col_row_missing(x, y)
+            self.miss += self.col_row_missing(x, y)
+            bid = Sudoku.block_id(changed)
+            prev_block = previous.get_from_block(bid)[0]
+            board_block = self.get_from_block(bid)[0]
+            for num in range(1, 9):
+                if (num not in prev_block) or (num not in board_block):
+                    self.miss.add(num)
+        return self.miss
