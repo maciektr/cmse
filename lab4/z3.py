@@ -20,7 +20,7 @@ def annealing(sudoku, steps, temp, alpha, hist=None):
     step_0 = steps
     while steps > 0 and temp > 1e-8:
         new_sudoku, changed = sudoku.next()
-        new_cost = new_sudoku.cost(changed, sudoku)
+        new_cost = new_sudoku.cost()
 
         if best['cost'] > new_cost:
             best['cost'] = new_cost
@@ -50,10 +50,11 @@ if __name__ == '__main__':
     # print(board.cost(), new_board.cost(changed, board))
 
     steps = 1e12
-    temp = 80
+    temp = 400
     alpha = 0.9995
 
     hist = {'list': [], 'copy': None}
     board = annealing(board, steps, temp, alpha, hist)
     plot_history.plot_loss(hist)
     board.print()
+    print(board.cost())

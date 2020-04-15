@@ -1,5 +1,4 @@
 from random import randint
-import multiset
 
 
 class Sudoku:
@@ -16,10 +15,8 @@ class Sudoku:
                 if self.board[i][k] is None:
                     self.mutable.append((i, k))
         missing = list(self.missing())
-        m = len(missing) - 1
         for x, y in self.mutable:
-            self.board[x][y] = missing[m]
-            m -= 1
+            self.board[x][y] = missing.pop()
 
     def read_from_file(self, path):
         with open(path, 'r') as f:
@@ -107,7 +104,6 @@ class Sudoku:
         return res
 
     # def next_random(self):
-    #     # x, y = randint(0, self.size - 1), randint(0, self.size - 1)
     #     x, y = self.mutable[randint(0, len(self.mutable) - 1)]
     #     res = self.copy()
     #     res.board[x][y] = randint(1, 9)
@@ -115,28 +111,14 @@ class Sudoku:
     #     res.mutable = self.mutable
     #     return res, (x, y)
 
-    def col_row_missing(self, x, y):
-        res = []
-        seen_col = set()
-        seen_row = set()
-        for i in range(0, self.size):
-            col_el = self.board[x][i]
-            row_el = self.board[i][y]
-            seen_col.add(col_el)
-            seen_row.add(row_el)
-        for num in range(1, 9):
-            if (num not in seen_col) or (num not in seen_row):
-                res.append(num)
-        return res
-
     def missing(self):
-        self.miss = multiset.Multiset()
+        miss = []
         for i in range(0, 8 + 1):
             el, con = self.get_from_block(i)
-            for num in range(1, 9):
+            for num in range(1, 9+1):
                 if num not in el:
-                    self.miss.add(num)
-        return self.miss
+                    miss.append(num)
+        return miss
 
     def random_mutable(self):
         return self.mutable[randint(0, len(self.mutable) - 1)]
