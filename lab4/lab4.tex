@@ -211,14 +211,76 @@ Laboratorium IV}
         \end{itemize}
         Tak przygotowany program testowałem z parametrami: Obraz rozmiaru 64x64, ilość kroków algorytmu wyżarzania $10^{12}$, temperatura 80, współczynnik $\alpha = 0.9995$. Następny obraz wyznaczany jest poprzez losową zamianę dwóch dowolnych punktów. Funkcja kosztu obrazu zoptymalizowana jest, by w następnym kroku liczyć wartości tylko w tych polach, które uległy zmianie.\\
         Przykładowe wyniki działania: 
-                \begin{figure}[h!]
+        \begin{figure}[h!]
             \centering
-            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_0.png}}
-            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_1.png}}
-            \subfloat[]{\includegraphics[width=6cm]{lab4/img/greedy/greed_2_2.png}}
-            \caption{Sąsiedztwo: , funkcja energii: .}
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/z1_0.png}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 16+8, funkcja energii: dist.}
         \end{figure}\\
-
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 8, funkcja energii: dist.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 4, funkcja energii: dist.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 16+8, funkcja energii: pushpull.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 16, funkcja energii: pushpull.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 8, funkcja energii: pushpull.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 16+8, funkcja energii: diff.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 16, funkcja energii: diff.}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+            \caption{Sąsiedztwo: 8, funkcja energii: diff.}
+        \end{figure}\\
+        % \begin{figure}[h!]
+        %     \centering
+        %     \subfloat[Przed]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+        %     \subfloat[Po]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+        %     \subfloat[Funkcja kosztu]{\includegraphics[width=6cm]{lab4/img/bin_img/}}
+        %     \caption{Sąsiedztwo: , funkcja energii: .}
+        % \end{figure}\\
 
         
 
