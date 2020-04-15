@@ -68,13 +68,6 @@ def dist(x, y, k, m):
     return np.sqrt((x - k) ** 2 + (y - m) ** 2)
 
 
-def energy_same(img, x, y, k, m):
-    d = dist(x, y, k, m)
-    if img[x][y] == img[k][m]:
-        return 1 * d
-    return 0
-
-
 def energy_on(img, x, y, k, m):
     d = dist(x, y, k, m)
     if img[x][y] == img[k][m] and img[k][m] == 1:
@@ -87,6 +80,23 @@ def energy_diff(img, x, y, k, m):
     if img[x][y] == img[k][m]:
         return 0
     return -d
+
+
+def energy_pushpull(img, x, y, k, m):
+    d = dist(x, y, k, m)
+    if img[x][y] == img[k][m]:
+        return d
+    return -d
+
+
+def energy_dist(img, x, y, k, m):
+    d = dist(x, y, k, m)
+    if img[x][y] == img[k][m]:
+        if d <= np.sqrt(2) + 1e-5:
+            return d
+        else:
+            return -d
+    return 0
 
 
 def choose_img(img):
@@ -147,7 +157,7 @@ if __name__ == '__main__':
     after_path = 'img2.png'
 
     n = 64
-    density = 0.1
+    density = 0.4
     steps = 1e12
     temp = 80
     alpha = 0.9995
@@ -156,7 +166,7 @@ if __name__ == '__main__':
     imageio.imsave(before_path, img)
 
     hist = {'list': [], 'copy': False}
-    img = annealing(img, adjacent_four, energy_on, steps, temp, alpha, hist)
+    img = annealing(img, adjacent_eight, energy_diff, steps, temp, alpha, hist)
     plot_history.plot_loss(hist)
 
     imageio.imsave(after_path, img)
