@@ -93,7 +93,7 @@ class Sudoku:
         return res
 
     def next(self):
-        x, y = randint(0, self.size), randint(0, self.size)
+        x, y = randint(0, self.size-1), randint(0, self.size-1)
         res = self.copy()
         res.board[x][y] = randint(1, 9)
-        return res
+        return res, (x, y)
