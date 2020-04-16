@@ -130,10 +130,6 @@ def annealing(img, adjacency, energy, steps, temp, alpha, hist=None):
     step_0 = steps
     while steps > 0 and temp > 1e-8:
         new_img, changed = choose_img(img)
-        # print(changed, img[changed[0][0]][changed[0][1]], img[changed[1][0]][changed[1][1]],
-        #       new_img[changed[0][0]][changed[0][1]], new_img[changed[1][0]][changed[1][1]])
-        # print(new_img == img)
-
         new_cost = cost_function(new_img, adjacency, energy, changed, img, cost)
         if best['cost'] > new_cost:
             best['cost'] = new_cost
