@@ -3,7 +3,7 @@ import networkx as nx
 import numpy as np
 
 
-class Circute(nx.Graph):
+class Circuit(nx.Graph):
     def __init__(self, V, L, source, target, emf):
         super().__init__()
         self.add_nodes_from([i for i in range(0, V)])
@@ -41,7 +41,7 @@ class Circute(nx.Graph):
         nc = ['c' for _ in range(self.number_of_nodes())]
         nc[self.source] = 'g'
         nc[self.target] = 'r'
-        plt.figure("Circute", figsize=(10, 10))
+        plt.figure("Circuit", figsize=(10, 10))
         nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=1000)
         ids = dict([])
         for i in self.nodes():
@@ -54,15 +54,15 @@ class Circute(nx.Graph):
 
 
 class CurrentGraph(nx.DiGraph):
-    def __init__(self, circute: Circute):
+    def __init__(self, Circuit: Circuit):
         super().__init__(directed=True)
-        self.add_nodes_from(circute.nodes())
-        nx.set_node_attributes(self, nx.get_node_attributes(circute, 'voltage'), 'voltage')
-        self.source = circute.source
-        self.target = circute.target
-        for i in circute.nodes:
-            for k, v in circute[i].items():
-                v_curr = (circute.nodes[i]['voltage'] - circute.nodes[k]['voltage']) / v['resistance']
+        self.add_nodes_from(Circuit.nodes())
+        nx.set_node_attributes(self, nx.get_node_attributes(Circuit, 'voltage'), 'voltage')
+        self.source = Circuit.source
+        self.target = Circuit.target
+        for i in Circuit.nodes:
+            for k, v in Circuit[i].items():
+                v_curr = (Circuit.nodes[i]['voltage'] - Circuit.nodes[k]['voltage']) / v['resistance']
                 if v_curr > 0:
                     self.add_edge(i, k)
                     self[i][k]['current'] = abs(v_curr)
@@ -75,7 +75,7 @@ class CurrentGraph(nx.DiGraph):
         nc = ['c' for _ in range(self.number_of_nodes())]
         nc[self.source] = 'g'
         nc[self.target] = 'r'
-        plt.figure("Solved circute", figsize=(10, 10))
+        plt.figure("Solved Circuit", figsize=(10, 10))
         nx.draw_networkx_nodes(self, pos, node_color=nc, cmap=plt.get_cmap('jet'), node_size=900)
         nx.draw_networkx_labels(self, pos, dict(
             map(lambda x: (x[0], str(round(x[1], 2)) + 'V'), nx.get_node_attributes(self, 'voltage').items())))

@@ -1,4 +1,4 @@
-from Circute import Circute, CurrentGraph
+from Circuit import Circuit, CurrentGraph
 import matplotlib.pyplot as plt
 from random import randint
 import networkx as nx
@@ -14,10 +14,10 @@ def read_from_file(pathToFile):
     source, target, emf = dimacs.read_source(pathToFile)
     V, L = dimacs.loadWeightedGraph(pathToFile)
     L = list(map(lambda x: (x[0] - 1, x[1] - 1, x[2]), L))
-    return Circute(V, L, source, target, emf)
+    return Circuit(V, L, source, target, emf)
 
 
-def get_random_circute(n, type='general', min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5):
+def get_random_circuit(n, type='general', min_r=1, max_r=1000, min_v=1, max_v=1000, density=0.5):
     G = nx.Graph()
     if type == 'erdos':
         G = nx.erdos_renyi_graph(n, density)
@@ -45,16 +45,16 @@ def get_random_circute(n, type='general', min_r=1, max_r=1000, min_v=1, max_v=10
     for i in G.nodes():
         for k, v in G[i].items():
             L.append((i, k, randint(min_r, max_r)))
-    return Circute(V, L, 0, V - 1, randint(min_v, max_v))
+    return Circuit(V, L, 0, V - 1, randint(min_v, max_v))
 
 
 if __name__ == '__main__':
     path = 'graphs/grid100x100'
     # G = read_from_file(path)
-    # G = get_random_circute(20, 'bridge')
-    # G = get_random_circute(20, 'regular3')
-    # G = get_random_circute(20, 'general')
-    G = get_random_circute(20, 'erdos')
+    # G = get_random_circuit(20, 'bridge')
+    # G = get_random_circuit(20, 'regular3')
+    # G = get_random_circuit(20, 'general')
+    G = get_random_circuit(20, 'erdos')
     G.plot()
     res = solve(G)
     print("Solution correct: ", res.correct())
