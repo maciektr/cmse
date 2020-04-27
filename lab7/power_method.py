@@ -2,10 +2,6 @@ from common import *
 import numpy as np
 
 
-def norm(vector):
-    return vector / abs(np.linalg.norm(vector, axis=0))
-
-
 def solve(matrix, eps=10 ** -9, steps=10 ** 5):
     vector = np.random.rand(matrix.shape[0])
     k = 0

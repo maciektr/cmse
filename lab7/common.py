@@ -12,6 +12,10 @@ def lib_solution(matrix):
     return v[:, i], w[i]
 
 
+def norm(vector):
+    return vector / abs(np.linalg.norm(vector, axis=0))
+
+
 def check_correct(vector, dominant, lib_vector, lib_dominant, eps=10 ** -5):
     print("Vector correct: ", np.all(abs(vector) - abs(lib_vector) < eps), ", Dominant correct: ",
           (dominant - lib_dominant < eps))
