@@ -1,3 +1,5 @@
+lab*/mownit-lab*.pdf
+.vscode/
 venv
 # Created by https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
@@ -737,10 +739,3 @@ dmypy.json
 .history
 
 # End of https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
-.vscode/
-
-lab4/mownit-lab4.pdf
-
-lab5/mownit-lab5.pdf
-
-lab6/mownit-lab6.pdf
