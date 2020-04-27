@@ -1,9 +1,5 @@
+from common import *
 import numpy as np
-
-
-def rand_sym_matrix(n, val_range=10 ** 6):
-    m = np.random.uniform(-val_range, val_range, size=(n, n))
-    return (m + m.T) / 2
 
 
 def norm(vector):
@@ -23,17 +19,6 @@ def solve(matrix, eps=10 ** -9, steps=10 ** 5):
         vector = next_vec
         k += 1
     return norm(vector), dominant_val
-
-
-def lib_solution(matrix):
-    w, v = np.linalg.eig(matrix)
-    i = np.argmax(abs(w))
-    return v[:, i], w[i]
-
-
-def check_correct(vector, dominant, lib_vector, lib_dominant, eps=10 ** -5):
-    print("Vector correct: ", np.all(abs(vector) - abs(lib_vector) < eps), ", Dominant correct: ",
-          (dominant - lib_dominant < eps))
 
 
 if __name__ == '__main__':
