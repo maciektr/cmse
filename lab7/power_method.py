@@ -2,7 +2,7 @@ from common import *
 import numpy as np
 
 
-def solve(matrix, eps=10 ** -9, steps=10 ** 5):
+def power_method(matrix, eps=10 ** -12, steps=10 ** 9):
     vector = np.random.rand(matrix.shape[0])
     k = 0
     dominant_val = 0
@@ -19,7 +19,7 @@ def solve(matrix, eps=10 ** -9, steps=10 ** 5):
 
 if __name__ == '__main__':
     matrix = rand_sym_matrix(100)
-    vector, dominant = solve(matrix, 10 ** -12, 10 ** 9)
+    vector, dominant = power_method(matrix)
     print(vector)
     print(dominant)
     lib_vector, lib_dominant = lib_solution(matrix)
