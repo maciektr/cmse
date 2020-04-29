@@ -4,7 +4,9 @@ import scipy.linalg
 from power_method import power_method
 
 
-def rayleigh_method(matrix, sigma, eps=10 ** -6, steps=10 ** 5):
+def rayleigh_method(matrix, sigma=None, eps=10 ** -6, steps=10 ** 5):
+    if sigma is None:
+        _, sigma = power_method(matrix, steps=10)
     vector = np.random.rand(matrix.shape[0])
     k = 0
     while k < steps:

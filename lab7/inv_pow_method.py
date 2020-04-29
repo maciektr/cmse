@@ -4,7 +4,9 @@ import numpy as np
 from power_method import power_method
 
 
-def inv_pow_method(matrix, sigma,  eps=10 ** -9, steps=10 ** 9):
+def inv_pow_method(matrix, sigma=None,  eps=10 ** -9, steps=10 ** 9):
+    if sigma is None:
+        _, sigma = power_method(matrix, steps=10)
     vector = np.random.rand(matrix.shape[0])
     vector = norm(vector)
     k = 0
