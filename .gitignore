@@ -1,6 +1,7 @@
 lab*/mownit-lab*.pdf
 .vscode/
 venv
+/lab6/wiki/
 # Created by https://www.gitignore.io/api/c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=c,c++,tex,cmake,latex,python,clion+all,pycharm+all,visualstudiocode
 
