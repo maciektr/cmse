@@ -1,6 +1,9 @@
+from nltk.corpus import stopwords
 import multiprocessing
 import html2text
+import nltk
 import os
+import re
 
 
 def tokenize_file(path):
@@ -23,9 +26,21 @@ def get_all_words(folder_path):
     return list(result)
 
 
+def remove_stop_words(words):
+    nltk.download('stopwords')
+    stop_words = set(stopwords.words('english'))
+    for stop in stop_words:
+        words = filter(lambda w: stop not in w, words)
+    words = filter(lambda w: '!' != w, words)
+    words = filter(lambda w: '.' != w, words)
+    words = filter(lambda w: '\"' != w, words)
+    words = filter(lambda w: '\"\"' != w, words)
+    return list(words)
+
+
 if __name__ == '__main__':
     # folder = 'wiki'
     folder = 'test_dir'
     res = get_all_words(folder)
-    print(res)
+    print(remove_stop_words(res))
     print(len(res))
