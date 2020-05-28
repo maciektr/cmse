@@ -1,3 +1,4 @@
+from alphabet_detector import AlphabetDetector
 from nltk.corpus import stopwords
 from string import punctuation
 import multiprocessing
@@ -26,21 +27,34 @@ def get_all_words(folder_path):
     return list(result)
 
 
-def process_words(words):
-    nltk.download('stopwords')
-    words = list(map(lambda w: w.lower(), words))
-    stop_words = list(stopwords.words('english'))
-    stop_words += ['.html', 'http://']
-    for stop in stop_words:
-        words = filter(lambda w: stop not in w, words)
+def process_word(word):
+    ad = AlphabetDetector()
+    if not ad.is_latin(word):
+        return ''
 
+    word = word.lower()
     chars = list(punctuation)
     chars = chars + ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     for char in chars:
-        words = list(map(lambda w: w.replace(char, ''), words))
-    words = list(filter(lambda w: w != 'aa', words))
-    words = list(filter(lambda w: w != 'aaa', words))
-    words = list(filter(lambda w: len(w) > 1, words))
+        word = word.replace(char, '')
+
+    stop_words = list(stopwords.words('english'))
+    stop_words += ['.html', 'http://', 'aa', 'aaa', 'bb', 'bbb']
+    for stop in stop_words:
+        if stop == word:
+            return ''
+
+    if len(set(word)) == 1:
+        return ''
+
+    return word
+
+
+def process_words(words):
+    nltk.download('stopwords')
+    with multiprocessing.Pool(processes=8) as pool:
+        words = pool.map(process_word, words)
+    words = list(filter(lambda w: len(w) > 1, list(set(words))))
     return list(words)
 
 
@@ -48,12 +62,9 @@ if __name__ == '__main__':
     # folder = 'wiki'
     folder = 'test_dir'
     res = get_all_words(folder)
-    # print("R",res)
-    words = sorted(process_words(res))
-    # words = list(sorted(words))[:10]
-    # words = res
-    # print(words)
+    # words = sorted(process_words(res))
+    words = process_words(res)
     print("---------")
+    # print(words)
     print(len(res))
     print(len(words))
-    print(words[:200])
