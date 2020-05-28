@@ -1,9 +1,9 @@
 from nltk.corpus import stopwords
+from string import punctuation
 import multiprocessing
 import html2text
 import nltk
 import os
-import re
 
 
 def tokenize_file(path):
@@ -26,15 +26,21 @@ def get_all_words(folder_path):
     return list(result)
 
 
-def remove_stop_words(words):
+def process_words(words):
     nltk.download('stopwords')
-    stop_words = set(stopwords.words('english'))
+    words = list(map(lambda w: w.lower(), words))
+    stop_words = list(stopwords.words('english'))
+    stop_words += ['.html', 'http://']
     for stop in stop_words:
         words = filter(lambda w: stop not in w, words)
-    words = filter(lambda w: '!' != w, words)
-    words = filter(lambda w: '.' != w, words)
-    words = filter(lambda w: '\"' != w, words)
-    words = filter(lambda w: '\"\"' != w, words)
+
+    chars = list(punctuation)
+    chars = chars + ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    for char in chars:
+        words = list(map(lambda w: w.replace(char, ''), words))
+    words = list(filter(lambda w: w != 'aa', words))
+    words = list(filter(lambda w: w != 'aaa', words))
+    words = list(filter(lambda w: len(w) > 1, words))
     return list(words)
 
 
@@ -42,5 +48,12 @@ if __name__ == '__main__':
     # folder = 'wiki'
     folder = 'test_dir'
     res = get_all_words(folder)
-    print(remove_stop_words(res))
+    # print("R",res)
+    words = sorted(process_words(res))
+    # words = list(sorted(words))[:10]
+    # words = res
+    # print(words)
+    print("---------")
     print(len(res))
+    print(len(words))
+    print(words[:200])
