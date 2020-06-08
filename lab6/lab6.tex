@@ -18,6 +18,7 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{colortbl}
+\usepackage[hidelinks]{hyperref}
 
 \geometry{
 a4paper,
@@ -56,6 +57,36 @@ Laboratorium VI}
 
 \begin{document}
     \maketitle
-    \section{}
+    \section{Zbiór dokumentów testowych}
+        Program przygotowany został do indeksowania artykułów z wikipedii. Jako zbiór stron indeksowanych przez wyszukiwarkę przyjąłem wszystkie artykuły linkowane na stronach wymienionych w ustawieniach programu. Program testowałem dla wszystkich artykułów linkowanych na stronie \url{https://en.wikipedia.org/wiki/List_of_Toyota_vehicles}.\\
+        
+        Otrzymałem w ten sposób zbiór około sześciuset dokumentów w formacie \textit{.html}, oraz wektor termów długości $36857$ elementów. 
+        
+    \section{Przetwarzanie wstępne zbioru dokumentów}
+        Przed uruchomieniem serwera wyszukiwarki przeprowadzane jest wstępne przetwarzanie zdefiniowanych źródeł. Ze względu na dużą złożoność obliczeniową tego zadania, wykorzystywane jest przetwarzanie wielowątkowe, oraz cacheowanie przetworzonych danych. Pliki źródłowe realizujące wstępne przetwarzanie zdefiniowane są wewnątrz modułu \textit{preprocessing}.\\
+        \subsection{Przetwarzanie źródeł dokumentów}
+        Najpierw, za pomocą prostego \textit{crawlera} znajdującego się w module \textit{gather\_pages} wykonanego w oparciu o \textit{BeautifulSoup} zbierane są wszystkie linki znajdujące się na stronach wymienionych w pliku konfiguracyjnym. Następnie, strony te są kolejno pobierane do folderu \textit{wiki\_pages} na dysku. Na tym etapie lokalnej bazie sqlite3 aplikacja zapisuje tytuł pobranego dokumentu, link do wikipedii z którego został pobrany, oraz ścieżkę do lokalnego pliku na dysku. 
+        
+        \subsection{Przetwarzanie pojedynczego artykułu}
+        Następnie, gdy wszystkie dokumenty zostaną zapisane, z bazy danych ładowany jest zbiór wszystkich dokumentów wymagających wczytania. Dokumenty te są przetwarzane za pomocą modułu \textit{words}. Początkowo, dokument jest tokenizowany za pomocą biblioteki \textit{html2text}. Z pliku wydobywane są wyłącznie wyrazy nie będące częścią linków, ścieżek obrazów, oraz innych elementów definiujących strukturę pliku \textit{html}. Następnie, każde ze słów jest sprowadzane do małych liter, przeprowadzany jest jego \textit{stemming} za pomocą biblioteki \textit{nltk}. Ignorowane są wyrazy pomocnicze, oraz napisane za pomocą liter alfabetu innego niż łaciński. Usuwane są też znaki specjalne, oraz cyfry. \\
+        
+        Otrzymany w ten sposób dla każdego z artykułów multizbiór wyrazów \textit{cacheowany} jest w bazie danych.
+    
+        \subsection{Budowa macierzy wektorów \textit{bag of words}}
+        Następnie, wyznaczana jest lista termów dla przygotowanego w poprzednich krokach zbioru artykułów. Stanowi on uporządkowaną leksykograficznie listę wyrazów występujących we wszystkich artykułach bez powtórzeń.\\
+        
+        Na podstawie listy termów wyznaczane są wektory \textit{bag of words} dla wszystkich artykułów. Są one przechowywane jako macierze rzadkie, z wykorzystaniem modułu \textit{scipy.sparse} (macierz \textit{csr\_matrix}). Wektory te nie są zapisywane w bazie danych (choć możliwe by to było choćby z wykorzystaniem pola \textit{BLOB} lub innej serializacji macierzy rzadkiej). Po uzyskaniu wszystkich wektorów, budowana jest macierz powstała poprzez zebranie ich w porządku leksykograficznym. 
+        
+        \subsection{Transformacja inverse document frequency}
+        
+        \subsection{Aproksymacja \textit{low rank}}
+        
+    \section{Wyszukiwanie wprowadzonego hasła}
+        \subsection{Badanie wpływu transformacji IDF}
+        
+        \subsection{Badanie optymalnego stopnia aproksymacji \textit{low rank}}
+    
+    \section{Interfejs graficzny}
+        Aplikacja wyposażona została w prosty interfejs graficzny 
     
 \end{document}
