@@ -60,9 +60,10 @@ Laboratorium VI}
 \begin{document}
     \maketitle
     \section{Zbiór dokumentów testowych}
-        Program przygotowany został do indeksowania artykułów z wikipedii. Jako zbiór stron indeksowanych przez wyszukiwarkę przyjąłem wszystkie artykuły linkowane na stronach wymienionych w ustawieniach programu. Program testowałem dla wszystkich artykułów linkowanych na stronie \url{https://en.wikipedia.org/wiki/List_of_Toyota_vehicles}.\\
+        Program przygotowany został do indeksowania artykułów z angielskiej wikipedii. Jako zbiór stron indeksowanych przez wyszukiwarkę przyjąłem wszystkie artykuły linkowane na stronach wymienionych w ustawieniach programu. Program testowałem dla wszystkich artykułów linkowanych na stronie \url{https://en.wikipedia.org/wiki/List_of_Toyota_vehicles}.\\
         
-        Otrzymałem w ten sposób zbiór około sześciuset dokumentów w formacie \textit{.html}, oraz wektor termów długości $36857$ elementów. 
+        Otrzymałem w ten sposób zbiór około sześciuset dokumentów w formacie \textit{.html}, oraz wektor termów długości $36857$ elementów.\\
+        Uwaga: taki dobór zbioru dokumentów skutkuje długim czasem wstępnego przetwarzania danych, rzędu od kilkunastu (na moim czterordzeniowym procesorem niskonapięciowym), do nawet kilkudziesięciu minut (na procesorach wolniejszych / o ograniczonej ilości dostępnych rdzeni). Dla celów testowych możliwe jest wykorzystanie mniejszego zbioru danych, jak na przykład lista modeli marki \textit{GEO}, których przygotowanie będzie trwało krócej. Należy w tym celu zmodyfikować plik \textit{config.py}.
         
     \section{Przetwarzanie wstępne zbioru dokumentów}
         Przed uruchomieniem serwera wyszukiwarki przeprowadzane jest wstępne przetwarzanie zdefiniowanych źródeł. Ze względu na dużą złożoność obliczeniową tego zadania, wykorzystywane jest przetwarzanie wielowątkowe, oraz cacheowanie przetworzonych danych. Pliki źródłowe realizujące wstępne przetwarzanie zdefiniowane są wewnątrz modułu \textit{preprocessing}.\\
@@ -70,19 +71,19 @@ Laboratorium VI}
         Najpierw, za pomocą prostego \textit{crawlera} znajdującego się w module \textit{gather\_pages} wykonanego w oparciu o \textit{BeautifulSoup} zbierane są wszystkie linki znajdujące się na stronach wymienionych w pliku konfiguracyjnym. Następnie, strony te są kolejno pobierane do folderu \textit{wiki\_pages} na dysku. Na tym etapie lokalnej bazie sqlite3 aplikacja zapisuje tytuł pobranego dokumentu, link do wikipedii z którego został pobrany, oraz ścieżkę do lokalnego pliku na dysku. 
         
         \subsection{Przetwarzanie pojedynczego artykułu}
-        Następnie, gdy wszystkie dokumenty zostaną zapisane, z bazy danych ładowany jest zbiór wszystkich dokumentów wymagających wczytania. Dokumenty te są przetwarzane za pomocą modułu \textit{words}. Początkowo, dokument jest tokenizowany za pomocą biblioteki \textit{html2text}. Z pliku wydobywane są wyłącznie wyrazy nie będące częścią linków, ścieżek obrazów, oraz innych elementów definiujących strukturę pliku \textit{html}. Następnie, każde ze słów jest sprowadzane do małych liter, przeprowadzany jest jego \textit{stemming} za pomocą biblioteki \textit{nltk}. Ignorowane są wyrazy pomocnicze, oraz napisane za pomocą liter alfabetu innego niż łaciński. Usuwane są też znaki specjalne, oraz cyfry. \\
+        Następnie, gdy wszystkie dokumenty zostaną zapisane, z bazy danych ładowany jest zbiór wszystkich dokumentów wymagających wczytania. Dokumenty te są przetwarzane za pomocą modułu \textit{words}. Początkowo, dokument jest tokenizowany za pomocą biblioteki \textit{html2text}. Z pliku wydobywane są wyłącznie wyrazy nie będące częścią linków, ścieżek obrazów, oraz innych elementów definiujących strukturę pliku \textit{html}. Następnie, każde ze słów jest sprowadzane do małych liter, oraz przeprowadzany jest jego \textit{stemming} za pomocą biblioteki \textit{nltk}. Ignorowane są wyrazy pomocnicze, oraz napisane za pomocą liter alfabetu innego niż łaciński. Usuwane są też znaki specjalne, oraz cyfry. \\
         
         Otrzymany w ten sposób dla każdego z artykułów multizbiór wyrazów \textit{cacheowany} jest w bazie danych.
     
         \subsection{Budowa macierzy wektorów \textit{bag of words}}
-        Następnie, wyznaczana jest lista termów dla przygotowanego w poprzednich krokach zbioru artykułów. Stanowi on uporządkowaną leksykograficznie listę wyrazów występujących we wszystkich artykułach bez powtórzeń.\\
+        Następnie, wyznaczana jest lista termów dla przygotowanego w poprzednich krokach zbioru artykułów. Stanowi ona uporządkowaną leksykograficznie listę wyrazów występujących we wszystkich artykułach bez powtórzeń.\\
         
         Na podstawie listy termów wyznaczane są wektory \textit{bag of words} dla wszystkich artykułów. Są one przechowywane jako macierze rzadkie, z wykorzystaniem modułu \textit{scipy.sparse} (macierz \textit{csr\_matrix}). Wektory te nie są zapisywane w bazie danych (choć możliwe by to było choćby z wykorzystaniem pola \textit{BLOB} lub innej metody serializacji macierzy rzadkich). Po uzyskaniu wszystkich wektorów, budowana jest macierz powstała poprzez zebranie ich w porządku leksykograficznym. \\
         
-        Otrzymana w ten sposób macierz przemnożona została przez wektor inverse document frequency. Celem tej transformacji jest wyrównanie znaczenia pomiędzy częściej i rzadziej występującymi w tekście słowami podczas wyszukiwania. Następnie macierz aproksymowana jest z wykorzystaniem \textit{low rank approx}, oraz dekompozycji svd. Stopień aproksymacji $k$ wyznaczany jest na podstawie liczby dokumentów. Zależność liniowa stopnia aproksymacji względem liczby artykułów dobrana została eksperymentalnie dla testowanego zbioru opisanego w pierwszym paragrafie tego sprawozdania. 
+        Otrzymana w ten sposób macierz przemnożona została przez wektor inverse document frequency. Celem tej transformacji jest wyrównanie znaczenia pomiędzy częściej i rzadziej występującymi w tekście słowami podczas wyszukiwania. Następnie macierz aproksymowana jest z wykorzystaniem \textit{low rank approx}, oraz dekompozycji svd. Stopień aproksymacji $k$ wyznaczany jest na podstawie liczby dokumentów. Stosunek stopnia aproksymacji do liczby artykułów dobrany został eksperymentalnie dla testowanego zbioru, opisanego w pierwszym paragrafie tego sprawozdania. 
         
     \section{Wyszukiwanie wprowadzonego hasła}
-        Po wprowadzeniu zapytania przez użytkownika, przedstawiane jest ono w postaci wektora \textit{bag of words}. Następnie, liczona jest korelacja wyprowadzonego wektora z wektorami w macierzy odpowiadającymi za kolejne strony. Jako wynik wyszukiwania zwracane jest \textit{n\_pages} artykułów o najwyższej korelacji, gdzie \textit{n\_pages} jest parametrem funkcji odpowiadającej za wyszukanie (domyślnie 10).\\
+        Po wprowadzeniu zapytania przez użytkownika, przedstawiane jest ono w postaci wektora \textit{bag of words}, w sposób analogiczny do opisanego w poprzednim paragrafie. Następnie, liczone są korelacje wyprowadzonego wektora z wektorami w macierzy odpowiadającymi za kolejne strony. Jako wynik wyszukiwania zwracane jest \textit{n\_pages} artykułów o najwyższej korelacji, gdzie \textit{n\_pages} jest parametrem funkcji odpowiadającej za wyszukanie (domyślnie 10).\\
         
         Korelacja pomiędzy wektorem odpowiadającym zapytaniu, a wektorem odpowiadającym za stronę wyznaczana jest jako iloczyn dwóch powyższych. W celu przyśpieszenia działania, funkcja wyszukująca operuje na macierzy w postaci \textit{numpy ndarray}, w przeciwieństwie do macierzy rzadkiej \textit{csr\_matrix} wykorzystywanej w poprzednich krokach. W razie potrzeby (to jest gdy macierz którą chcemy wykorzystać nie mieści się w klasycznej postaci w pamięci komputera) wykorzystać możemy macierz rzadką, kosztem wydajności. 
         
@@ -103,8 +104,31 @@ Laboratorium VI}
         \FloatBarrier
 
         \subsection{Badanie optymalnego stopnia aproksymacji \textit{low rank}}
-        Optymalny stopień aproksymacji dobrany został w sposób empiryczny dla przyjętego w pierwszym paragrafie zbioru testowego dokumentów. Macierz wektorów \textit{bag of words} odpowiadających za kolejne strony aproksymowana była przy pomocy parametru $k$ o wartościach kolejno ${20,40,60,80,100,300}$, oraz ilości dokumentów. Na podstawie tak przeprowadzonych testów ustaliłem w sposób subiektywny, że wartość współczynnika może wynosić około $80$, bez znaczącej utraty dokładności. Odpowiada to około $\frac{13}{100}$ ilości zindeksowanych artykułów. 
+        Optymalny stopień aproksymacji dobrany został w sposób empiryczny dla przyjętego w pierwszym paragrafie zbioru testowego dokumentów. Macierz wektorów \textit{bag of words} odpowiadających za kolejne strony aproksymowana była przy pomocy parametru $k$ o wartościach kolejno ${20,40,60,80,100,300}$, oraz ilości dokumentów. Na podstawie tak przeprowadzonych testów ustaliłem w sposób subiektywny, że wartość współczynnika może wynosić około $80$. Odpowiada to około $\frac{13}{100}$ ilości zindeksowanych artykułów. 
+
+        \subsection{Badanie wpływu transformacji IDF}
+        Wykonałem też zapytania testowe mające wykazać wpływ transformacji IDF na wyniki wyszukiwania. Zastosowanie transformacji szczególnie znacząco wpłynęło na wynik zapytania \textit{Car with the best engine}, powodując że strona \url{https://en.wikipedia.org/wiki/Suzuki} straciła pierwszą pozycję w wynikach, na rzecz strony \url{https://en.wikipedia.org/wiki/Toyota_Prius}. Porównując częstość wystąpień wyszukiwanych słów w artykułach możemy stwierdzić, że faktycznie transformacja IDF pozwoliła zmniejszyć wpływ prawdopodobnie najczęściej występującego w całym zbiorze artykułów słowa - \textit{car} - na wyniki wyszukiwania.  
         
+        \begin{center}
+            \begin{table}[ht]
+                \centering
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    Strona & \textit{Car} & \textit{best} & \textit{engine}  \\
+                    \specialrule{1pt}{1pt}{1pt}
+                    Sports\_car & 276 & 8 & 56\\
+                    \hline
+                    Suzuki & 212 & 8 & 140\\
+                    \hline
+                    Toyota\_Prius & 189 & 39 & 27\\
+                    \hline 
+                    Toyota\_Windom & 59 & 25 & 34\\  
+                    \hline 
+                \end{tabular}
+                \caption{Częstotliwość występowania wyszukiwanych słów na kolejnych stronach. }
+            \end{table}
+        \end{center}
+
         \newpage
         \begin{figure}[h!]
             \centering
@@ -138,21 +162,15 @@ Laboratorium VI}
         \end{figure}
         \newpage
 
-        \subsection{Badanie wpływu transformacji IDF}
-            Wykonałem też zapytania testowe mające wykazać wpływ transfomacji IDF na wyniki wyszukiwania.
-            \begin{figure}[h!]
+        \begin{figure}[h!]
             \centering
             \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result1_svd.png}}
             \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result1_idf_svd.png}}
             \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result2_svd.png}}\\
             \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result2_idf_svd.png}}
             \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result3_svd.png}}
-            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result3_idf_svd.png}}\\
-            \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result4_svd.png}}
-            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result4_idf_svd.png}}
+            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result3_idf_svd.png}}
             \caption{Zmiana wyników wyszukiwania po przeprowadzeniu transformacji IDF.}
         \end{figure}
-
-            
 
 \end{document}
