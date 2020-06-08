@@ -28,6 +28,8 @@ top=20mm
 }
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \renewcommand\thesection{}
+\renewcommand\thesubsection{}
+
 \lstset{%
 literate=%
  {ą}{{\k{a}}}1
@@ -75,18 +77,56 @@ Laboratorium VI}
         \subsection{Budowa macierzy wektorów \textit{bag of words}}
         Następnie, wyznaczana jest lista termów dla przygotowanego w poprzednich krokach zbioru artykułów. Stanowi on uporządkowaną leksykograficznie listę wyrazów występujących we wszystkich artykułach bez powtórzeń.\\
         
-        Na podstawie listy termów wyznaczane są wektory \textit{bag of words} dla wszystkich artykułów. Są one przechowywane jako macierze rzadkie, z wykorzystaniem modułu \textit{scipy.sparse} (macierz \textit{csr\_matrix}). Wektory te nie są zapisywane w bazie danych (choć możliwe by to było choćby z wykorzystaniem pola \textit{BLOB} lub innej serializacji macierzy rzadkiej). Po uzyskaniu wszystkich wektorów, budowana jest macierz powstała poprzez zebranie ich w porządku leksykograficznym. 
+        Na podstawie listy termów wyznaczane są wektory \textit{bag of words} dla wszystkich artykułów. Są one przechowywane jako macierze rzadkie, z wykorzystaniem modułu \textit{scipy.sparse} (macierz \textit{csr\_matrix}). Wektory te nie są zapisywane w bazie danych (choć możliwe by to było choćby z wykorzystaniem pola \textit{BLOB} lub innej metody serializacji macierzy rzadkich). Po uzyskaniu wszystkich wektorów, budowana jest macierz powstała poprzez zebranie ich w porządku leksykograficznym. \\
         
-        \subsection{Transformacja inverse document frequency}
-        
-        \subsection{Aproksymacja \textit{low rank}}
+        Otrzymana w ten sposób macierz przemnożona została przez wektor inverse document frequency. Celem tej transformacji jest wyrównanie znaczenia pomiędzy częściej i rzadziej występującymi w tekście słowami podczas wyszukiwania. Następnie macierz aproksymowana jest z wykorzystaniem \textit{low rank approx}, oraz dekompozycji svd. Stopień aproksymacji $k$ wyznaczany jest na podstawie liczby dokumentów. Zależność liniowa stopnia aproksymacji względem liczby artykułów dobrana została eksperymentalnie dla testowanego zbioru opisanego w pierwszym paragrafie tego sprawozdania. 
         
     \section{Wyszukiwanie wprowadzonego hasła}
-        \subsection{Badanie wpływu transformacji IDF}
+        Po wprowadzeniu zapytania przez użytkownika, przedstawiane jest ono w postaci wektora \textit{bag of words}. Następnie, liczona jest korelacja wyprowadzonego wektora z wektorami w macierzy odpowiadającymi za kolejne strony. Jako wynik wyszukiwania zwracane jest \textit{n\_pages} artykułów o najwyższej korelacji, gdzie \textit{n\_pages} jest parametrem funkcji odpowiadającej za wyszukanie (domyślnie 10).\\
+        
+        Korelacja pomiędzy wektorem odpowiadającym zapytaniu, a wektorem odpowiadającym za stronę wyznaczana jest jako iloczyn dwóch powyższych. W celu przyśpieszenia działania, funkcja wyszukująca operuje na macierzy w postaci \textit{numpy ndarray}, w przeciwieństwie do macierzy rzadkiej \textit{csr\_matrix} wykorzystywanej w poprzednich krokach. W razie potrzeby (to jest gdy macierz którą chcemy wykorzystać nie mieści się w klasycznej postaci w pamięci komputera) wykorzystać możemy macierz rzadką, kosztem wydajności. 
         
         \subsection{Badanie optymalnego stopnia aproksymacji \textit{low rank}}
-    
+        Optymalny stopień aproksymacji dobrany został w sposób empiryczny dla przyjętego w pierwszym paragrafie zbioru testowego dokumentów. Macierz wektorów \textit{bag of words} odpowiadających za kolejne strony aproksymowana była przy pomocy parametru $k$ o wartościach kolejno ${20,40,60,80,100,300}$, oraz ilości dokumentów. Na podstawie tak przeprowadzonych testów ustaliłem w sposób subiektywny, że wartość współczynnika może wynosić około $80$, bez znaczącej utraty dokładności. Odpowiada to około $\frac{13}{100}$ ilości zindeksowanych artykułów. 
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$k=20$]{\includegraphics[width=7cm]{lab6/img/front_result1_k20.png}}
+            \subfloat[$k=40$]{\includegraphics[width=7cm]{lab6/img/front_result1_k40.png}}\\
+            \subfloat[$k=60$]{\includegraphics[width=7cm]{lab6/img/front_result1_k60.png}}
+            \subfloat[$k=80$]{\includegraphics[width=7cm]{lab6/img/front_result1_k80.png}}\\
+            \subfloat[$k=100$]{\includegraphics[width=7cm]{lab6/img/front_result1_k100.png}}
+            \subfloat[$k=300$]{\includegraphics[width=7cm]{lab6/img/front_result1_idf_svd.png}}
+            \caption{Zapytanie testowe: "Toyota"}
+        \end{figure}\\
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$k=20$]{\includegraphics[width=7cm]{lab6/img/front_result2_k20.png}}
+            \subfloat[$k=40$]{\includegraphics[width=7cm]{lab6/img/front_result2_k40.png}}\\
+            \subfloat[$k=60$]{\includegraphics[width=7cm]{lab6/img/front_result2_k60.png}}
+            \subfloat[$k=80$]{\includegraphics[width=7cm]{lab6/img/front_result2_k80.png}}\\
+            \subfloat[$k=100$]{\includegraphics[width=7cm]{lab6/img/front_result2_k100.png}}
+            \subfloat[$k=300$]{\includegraphics[width=7cm]{lab6/img/front_result2_idf_svd.png}}
+            \caption{Zapytanie testowe: "Car with the best engine"}
+        \end{figure}
+        \FloatBarrier
+
+        
+        \subsection{Badanie wpływu transformacji IDF}
+            
+            
     \section{Interfejs graficzny}
-        Aplikacja wyposażona została w prosty interfejs graficzny 
-    
+        Aplikacja wyposażona została w prosty interfejs graficzny.
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[width=14cm]{lab6/img/front_index.png}
+            \caption{Główna strona wyszukiwarki}
+        \end{figure}\\
+        Został on wykonany w formie aplikacji internetowej opartej o framework \textit{Flask}. \\
+        Wyniki zapytania wyświetlane są wraz z odnośnikami do strony z której pochodzą, oraz wyznaczoną korelacją. 
+        \begin{figure}[h!]
+            \centering
+            \includegraphics[width=14cm]{lab6/img/front_result1.png}
+            \caption{Przykładowe wyniki zapytania}
+        \end{figure}\\
+
 \end{document}
