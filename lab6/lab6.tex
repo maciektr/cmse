@@ -86,35 +86,7 @@ Laboratorium VI}
         
         Korelacja pomiędzy wektorem odpowiadającym zapytaniu, a wektorem odpowiadającym za stronę wyznaczana jest jako iloczyn dwóch powyższych. W celu przyśpieszenia działania, funkcja wyszukująca operuje na macierzy w postaci \textit{numpy ndarray}, w przeciwieństwie do macierzy rzadkiej \textit{csr\_matrix} wykorzystywanej w poprzednich krokach. W razie potrzeby (to jest gdy macierz którą chcemy wykorzystać nie mieści się w klasycznej postaci w pamięci komputera) wykorzystać możemy macierz rzadką, kosztem wydajności. 
         
-        \subsection{Badanie optymalnego stopnia aproksymacji \textit{low rank}}
-        Optymalny stopień aproksymacji dobrany został w sposób empiryczny dla przyjętego w pierwszym paragrafie zbioru testowego dokumentów. Macierz wektorów \textit{bag of words} odpowiadających za kolejne strony aproksymowana była przy pomocy parametru $k$ o wartościach kolejno ${20,40,60,80,100,300}$, oraz ilości dokumentów. Na podstawie tak przeprowadzonych testów ustaliłem w sposób subiektywny, że wartość współczynnika może wynosić około $80$, bez znaczącej utraty dokładności. Odpowiada to około $\frac{13}{100}$ ilości zindeksowanych artykułów. 
-        \begin{figure}[h!]
-            \centering
-            \subfloat[$k=20$]{\includegraphics[width=7cm]{lab6/img/front_result1_k20.png}}
-            \subfloat[$k=40$]{\includegraphics[width=7cm]{lab6/img/front_result1_k40.png}}\\
-            \subfloat[$k=60$]{\includegraphics[width=7cm]{lab6/img/front_result1_k60.png}}
-            \subfloat[$k=80$]{\includegraphics[width=7cm]{lab6/img/front_result1_k80.png}}\\
-            \subfloat[$k=100$]{\includegraphics[width=7cm]{lab6/img/front_result1_k100.png}}
-            \subfloat[$k=300$]{\includegraphics[width=7cm]{lab6/img/front_result1_idf_svd.png}}
-            \caption{Zapytanie testowe: "Toyota"}
-        \end{figure}\\
-        \begin{figure}[h!]
-            \centering
-            \subfloat[$k=20$]{\includegraphics[width=7cm]{lab6/img/front_result2_k20.png}}
-            \subfloat[$k=40$]{\includegraphics[width=7cm]{lab6/img/front_result2_k40.png}}\\
-            \subfloat[$k=60$]{\includegraphics[width=7cm]{lab6/img/front_result2_k60.png}}
-            \subfloat[$k=80$]{\includegraphics[width=7cm]{lab6/img/front_result2_k80.png}}\\
-            \subfloat[$k=100$]{\includegraphics[width=7cm]{lab6/img/front_result2_k100.png}}
-            \subfloat[$k=300$]{\includegraphics[width=7cm]{lab6/img/front_result2_idf_svd.png}}
-            \caption{Zapytanie testowe: "Car with the best engine"}
-        \end{figure}
-        \FloatBarrier
-
-        
-        \subsection{Badanie wpływu transformacji IDF}
-            
-            
-    \section{Interfejs graficzny}
+        \subsection{Interfejs graficzny}
         Aplikacja wyposażona została w prosty interfejs graficzny.
         \begin{figure}[h!]
             \centering
@@ -128,5 +100,59 @@ Laboratorium VI}
             \includegraphics[width=14cm]{lab6/img/front_result1.png}
             \caption{Przykładowe wyniki zapytania}
         \end{figure}\\
+        \FloatBarrier
+
+        \subsection{Badanie optymalnego stopnia aproksymacji \textit{low rank}}
+        Optymalny stopień aproksymacji dobrany został w sposób empiryczny dla przyjętego w pierwszym paragrafie zbioru testowego dokumentów. Macierz wektorów \textit{bag of words} odpowiadających za kolejne strony aproksymowana była przy pomocy parametru $k$ o wartościach kolejno ${20,40,60,80,100,300}$, oraz ilości dokumentów. Na podstawie tak przeprowadzonych testów ustaliłem w sposób subiektywny, że wartość współczynnika może wynosić około $80$, bez znaczącej utraty dokładności. Odpowiada to około $\frac{13}{100}$ ilości zindeksowanych artykułów. 
+        
+        \newpage
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$k=20$]{\includegraphics[height=10cm]{lab6/img/front_result1_k20.png}}
+            \subfloat[$k=40$]{\includegraphics[height=10cm]{lab6/img/front_result1_k40.png}}
+            \subfloat[$k=60$]{\includegraphics[height=10cm]{lab6/img/front_result1_k60.png}}\\
+            \subfloat[$k=80$]{\includegraphics[height=10cm]{lab6/img/front_result1_k80.png}}
+            \subfloat[$k=100$]{\includegraphics[height=10cm]{lab6/img/front_result1_k100.png}}
+            \subfloat[$k=300$]{\includegraphics[height=10cm]{lab6/img/front_result1_idf_svd.png}}
+            \caption{Zapytanie testowe: "Toyota"}
+        \end{figure}
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$k=20$]{\includegraphics[height=10cm]{lab6/img/front_result2_k20.png}}
+            \subfloat[$k=40$]{\includegraphics[height=10cm]{lab6/img/front_result2_k40.png}}
+            \subfloat[$k=60$]{\includegraphics[height=10cm]{lab6/img/front_result2_k60.png}}\\
+            \subfloat[$k=80$]{\includegraphics[height=10cm]{lab6/img/front_result2_k80.png}}
+            \subfloat[$k=100$]{\includegraphics[height=10cm]{lab6/img/front_result2_k100.png}}
+            \subfloat[$k=300$]{\includegraphics[height=10cm]{lab6/img/front_result2_idf_svd.png}}
+            \caption{Zapytanie testowe: "Car with the best engine"}
+        \end{figure}
+        \begin{figure}[h!]
+            \centering
+            \subfloat[$k=20$]{\includegraphics[height=10cm]{lab6/img/front_result3_k20.png}}
+            \subfloat[$k=40$]{\includegraphics[height=10cm]{lab6/img/front_result3_k40.png}}
+            \subfloat[$k=60$]{\includegraphics[height=10cm]{lab6/img/front_result3_k60.png}}\\
+            \subfloat[$k=80$]{\includegraphics[height=10cm]{lab6/img/front_result3_k80.png}}
+            \subfloat[$k=100$]{\includegraphics[height=10cm]{lab6/img/front_result3_k100.png}}
+            \subfloat[$k=300$]{\includegraphics[height=10cm]{lab6/img/front_result3_idf_svd.png}}
+            \caption{Zapytanie testowe: "Four wheel drive"}
+        \end{figure}
+        \newpage
+
+        \subsection{Badanie wpływu transformacji IDF}
+            Wykonałem też zapytania testowe mające wykazać wpływ transfomacji IDF na wyniki wyszukiwania.
+            \begin{figure}[h!]
+            \centering
+            \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result1_svd.png}}
+            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result1_idf_svd.png}}
+            \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result2_svd.png}}\\
+            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result2_idf_svd.png}}
+            \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result3_svd.png}}
+            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result3_idf_svd.png}}\\
+            \subfloat[Bez IDF]{\includegraphics[height=10cm]{lab6/img/front_result4_svd.png}}
+            \subfloat[Z IDF]{\includegraphics[height=10cm]{lab6/img/front_result4_idf_svd.png}}
+            \caption{Zmiana wyników wyszukiwania po przeprowadzeniu transformacji IDF.}
+        \end{figure}
+
+            
 
 \end{document}
