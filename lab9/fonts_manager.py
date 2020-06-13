@@ -20,6 +20,26 @@ class FontsManager:
 
         self.fonts = {}
 
+    def show_read_letter(self, font_name, show_function):
+        for img in self.fonts[font_name].values():
+            show_function(img)
+
+    def get_chars_order(self):
+        return self.chars_order
+
+    def get_chars_img(self, font_name):
+        return list(self.fonts[font_name].values())
+
+    def get_font(self, font_name):
+        return self.fonts[font_name]
+
+    def get_max_char_shape(self, font_name):
+        chars = self.get_chars_img(font_name)
+        shapes = [c.shape for c in chars]
+        x = max(shapes, key=lambda s: s[0])[0]
+        y = max(shapes, key=lambda s: s[1])[1]
+        return x, y
+
     @staticmethod
     def cut_char(char, threshold=90, padding=1):
         labeled = measure.label(char > threshold)
@@ -45,9 +65,6 @@ class FontsManager:
             conv = convert_img(characters_img[i])
             font_chars[self.chars_order[i]] = self.cut_char(conv)
         self.fonts[font_name] = font_chars
-
-    def get_fonts(self):
-        return self.fonts
 
     def load_from_folder(self, folder_path):
         # with multiprocessing.Pool(processes=FontsManager.__N_PROCESSES) as pool:
