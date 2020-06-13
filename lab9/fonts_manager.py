@@ -33,6 +33,9 @@ class FontsManager:
     def get_font(self, font_name):
         return self.fonts[font_name]
 
+    def get_font_as_list(self, font_name):
+        return self.get_font(font_name).items()
+
     def get_max_char_shape(self, font_name):
         chars = self.get_chars_img(font_name)
         shapes = [c.shape for c in chars]
