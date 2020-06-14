@@ -70,9 +70,6 @@ class FontsManager:
         self.fonts[font_name] = font_chars
 
     def load_from_folder(self, folder_path):
-        # with multiprocessing.Pool(processes=FontsManager.__N_PROCESSES) as pool:
-        #     res = pool.map(, char_img)
-
         for root, dirs, files in os.walk(folder_path):
             for file in files:
                 file_path = os.path.join(root, file)

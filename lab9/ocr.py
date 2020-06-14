@@ -9,11 +9,11 @@ from fonts_manager import FontsManager
 class Ocr:
     __N_PROCESSES = 8
 
-    def __init__(self, fonts_folder='fonts'):
-        self.fonts_manager = FontsManager(stop=False)
+    def __init__(self, fonts_folder='fonts', stop=False):
+        self.fonts_manager = FontsManager(stop=stop)
         self.fonts_manager.load_from_folder(fonts_folder)
 
-    def read_text(self, file_path, font_name, overlap_threshold=0.5):
+    def read_text(self, file_path, font_name, overlap_threshold=0.5, space_threshold=1.1):
         text_img = read_img(file_path)
         text_img = self.denoise(text_img)
         chars_freq = self.characters_freq(font_name, text_img.shape)
@@ -25,7 +25,7 @@ class Ocr:
 
         found_chars_with_corr = self.remove_duplicates(found_chars_with_corr, max_char_shape, overlap_threshold)
         found_chars = [(pos, char) for pos, char, _ in found_chars_with_corr]
-        text = self.pos_to_text(found_chars, max_char_shape)
+        text = self.pos_to_text(found_chars, max_char_shape, space_threshold=space_threshold)
         return text
 
     # def correct_rotation(self, text_img):
